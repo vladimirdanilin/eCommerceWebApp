@@ -1,3 +1,5 @@
+using eCommerceWebApp.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -23,5 +25,13 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+void ConfigureServices(IServiceCollection services)
+{
+    //DbContext configuration
+    services.AddDbContext<AppDbContext>();
+
+    services.AddControllersWithViews();
+}
 
 app.Run();
