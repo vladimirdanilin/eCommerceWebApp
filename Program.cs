@@ -1,4 +1,5 @@
 using eCommerceWebApp.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +30,7 @@ app.MapControllerRoute(
 void ConfigureServices(IServiceCollection services)
 {
     //DbContext configuration
-    services.AddDbContext<AppDbContext>();
+    services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
 
     services.AddControllersWithViews();
 }
