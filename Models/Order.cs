@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace eCommerceWebApp.Models
 {
@@ -7,8 +8,6 @@ namespace eCommerceWebApp.Models
         [Key]
         public int Id { get; set; }
 
-        public int UserID { get; set; }
-
         public DateOnly OrderDate { get; set; }
 
         public string ShippingAddress { get; set; }
@@ -16,5 +15,12 @@ namespace eCommerceWebApp.Models
         //Relationships
 
         public List<Order_Product> Order_Products { get; set; }
+
+        //User
+
+        public int UserId { get; set; }
+        [ForeignKey("UserId")]
+
+        public User User { get; set; }
     }
 }

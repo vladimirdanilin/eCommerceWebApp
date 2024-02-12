@@ -20,11 +20,5 @@ namespace eCommerceWebApp.Models
 
         public string ProfilePictureURL { get; set; }
 
-        //Relationships
-
-        public int OrderId { get; set; }
-        [ForeignKey("OrderId")]
-
-        public Order Order { get; set; }
     }
 }
