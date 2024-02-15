@@ -22,6 +22,35 @@ namespace eCommerceWebApp.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("eCommerceWebApp.Models.Address", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostalOrZipCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Addresses");
+                });
+
             modelBuilder.Entity("eCommerceWebApp.Models.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -33,14 +62,15 @@ namespace eCommerceWebApp.Migrations
                     b.Property<DateOnly>("OrderDate")
                         .HasColumnType("date");
 
-                    b.Property<string>("ShippingAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ShippingAddressId")
+                        .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ShippingAddressId");
 
                     b.HasIndex("UserId");
 
@@ -82,6 +112,9 @@ namespace eCommerceWebApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ProductCategory")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Products");
@@ -115,22 +148,41 @@ namespace eCommerceWebApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ShippingAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("eCommerceWebApp.Models.User_Address", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AddressId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "AddressId");
+
+                    b.HasIndex("AddressId");
+
+                    b.ToTable("Users_Addresses");
+                });
+
             modelBuilder.Entity("eCommerceWebApp.Models.Order", b =>
                 {
-                    b.HasOne("eCommerceWebApp.Models.User", "User")
+                    b.HasOne("eCommerceWebApp.Models.Address", "ShippingAddress")
                         .WithMany()
+                        .HasForeignKey("ShippingAddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("eCommerceWebApp.Models.User", "User")
+                        .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ShippingAddress");
 
                     b.Navigation("User");
                 });
@@ -138,13 +190,13 @@ namespace eCommerceWebApp.Migrations
             modelBuilder.Entity("eCommerceWebApp.Models.Order_Product", b =>
                 {
                     b.HasOne("eCommerceWebApp.Models.Order", "Order")
-                        .WithMany("Order_Products")
+                        .WithMany("Orders_Products")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("eCommerceWebApp.Models.Product", "Product")
-                        .WithMany("Order_Products")
+                        .WithMany("Orders_Products")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -154,14 +206,45 @@ namespace eCommerceWebApp.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("eCommerceWebApp.Models.User_Address", b =>
+                {
+                    b.HasOne("eCommerceWebApp.Models.Address", "Address")
+                        .WithMany("Users_Addresses")
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("eCommerceWebApp.Models.User", "User")
+                        .WithMany("Users_Addresses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("eCommerceWebApp.Models.Address", b =>
+                {
+                    b.Navigation("Users_Addresses");
+                });
+
             modelBuilder.Entity("eCommerceWebApp.Models.Order", b =>
                 {
-                    b.Navigation("Order_Products");
+                    b.Navigation("Orders_Products");
                 });
 
             modelBuilder.Entity("eCommerceWebApp.Models.Product", b =>
                 {
-                    b.Navigation("Order_Products");
+                    b.Navigation("Orders_Products");
+                });
+
+            modelBuilder.Entity("eCommerceWebApp.Models.User", b =>
+                {
+                    b.Navigation("Orders");
+
+                    b.Navigation("Users_Addresses");
                 });
 #pragma warning restore 612, 618
         }

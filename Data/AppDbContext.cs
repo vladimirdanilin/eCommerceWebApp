@@ -19,9 +19,18 @@ namespace eCommerceWebApp.Data
                 op.ProductId
             });
 
-            modelBuilder.Entity<Order_Product>().HasOne(o => o.Order).WithMany(am => am.Order_Products).HasForeignKey(o => o.OrderId);
-            modelBuilder.Entity<Order_Product>().HasOne(p => p.Product).WithMany(am => am.Order_Products).HasForeignKey(p => p.ProductId);
+            modelBuilder.Entity<User_Address>().HasKey(au => new
+            {
+                au.UserId,
+                au.AddressId
+            });
 
+            modelBuilder.Entity<Order_Product>().HasOne(o => o.Order).WithMany(am => am.Orders_Products).HasForeignKey(o => o.OrderId);
+            modelBuilder.Entity<Order_Product>().HasOne(p => p.Product).WithMany(am => am.Orders_Products).HasForeignKey(p => p.ProductId);
+
+            modelBuilder.Entity<User_Address>().HasOne(u => u.User).WithMany(am => am.Users_Addresses).HasForeignKey(u => u.UserId);
+            modelBuilder.Entity<User_Address>().HasOne(a => a.Address).WithMany(am => am.Users_Addresses).HasForeignKey(a => a.AddressId);
+        
             base.OnModelCreating(modelBuilder);
         }
 
@@ -33,5 +42,9 @@ namespace eCommerceWebApp.Data
         public DbSet<User> Users { get; set; }
 
         public DbSet<Order_Product> Orders_Products { get; set; }
+
+        public DbSet<User_Address> Users_Addresses { get; set; }
+
+        public DbSet<Address> Addresses { get; set; }
     }
 }

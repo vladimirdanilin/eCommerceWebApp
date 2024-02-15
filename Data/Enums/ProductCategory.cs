@@ -5,6 +5,7 @@
         Electronics,
         Clothing,
         Books,
-        DIY
+        DIY,
+        Accessories
     }
 }

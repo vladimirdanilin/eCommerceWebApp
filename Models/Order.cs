@@ -10,11 +10,9 @@ namespace eCommerceWebApp.Models
 
         public DateOnly OrderDate { get; set; }
 
-        public string ShippingAddress { get; set; }
-
         //Relationships
 
-        public List<Order_Product> Order_Products { get; set; }
+        public List<Order_Product> Orders_Products { get; set; }
 
         //User
 
@@ -22,5 +20,12 @@ namespace eCommerceWebApp.Models
         [ForeignKey("UserId")]
 
         public User User { get; set; }
+
+        //Address
+
+        public int ShippingAddressId { get; set; }
+        [ForeignKey("ShippingAddressId")]
+
+        public Address ShippingAddress { get; set; }    
     }
 }

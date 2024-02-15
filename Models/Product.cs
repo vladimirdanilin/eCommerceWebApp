@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using eCommerceWebApp.Data.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace eCommerceWebApp.Models
 {
@@ -13,8 +14,10 @@ namespace eCommerceWebApp.Models
 
         public string Description { get; set; }
 
+        public ProductCategory ProductCategory { get; set; }
+
         //Relationships
 
-        public List<Order_Product> Order_Products { get; set; }
+        public List<Order_Product> Orders_Products { get; set; }
     }
 }
