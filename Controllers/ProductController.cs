@@ -1,4 +1,5 @@
 ﻿using eCommerceWebApp.Data;
+using eCommerceWebApp.Data.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,9 +14,14 @@ namespace eCommerceWebApp.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(ProductCategory? productCategory)
         {
             var allProducts = await _context.Products.ToListAsync();
+
+            if (productCategory != null)
+            {
+                allProducts = await _context.Products.Where(p => p.ProductCategory == productCategory).ToListAsync();
+            }
             return View(allProducts);
         }
     }

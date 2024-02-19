@@ -25,18 +25,26 @@
                        </li>
 
                        <li class="nav-item dropdown">
-                           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="button" 
-                           aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="button" data-bs-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">
                        <i class="bi bi-gear"></i>Management
                        </a>
+
                        @*Defining all the options below*@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" asp-controller="" asp-action=""><i class="bi bi-camera-reels"></i>      </a>
-                                <a class="dropdown-item" asp-controller="" asp-action=""><i class="bi bi-camera-reels"></i>      </a>
-                                <a class="dropdown-item" asp-controller="" asp-action=""><i class="bi bi-camera-reels"></i>      </a>
+                                <a class="dropdown-item" asp-controller="Product" asp-action="Index" asp-route-productCategory="Electronics"><i class="bi bi-camera-reels"></i> Electronics</a>
+                                <a class="dropdown-item" asp-controller="Product" asp-action="Index" asp-route-productCategory="Clothing"><i class="bi bi-camera-reels"></i> Clothing</a>
+                                <a class="dropdown-item" asp-controller="Product" asp-action="Index" asp-route-productCategory="Books"><i class="bi bi-camera-reels"></i> Books</a>
+                                <a class="dropdown-item" asp-controller="Product" asp-action="Index" asp-route-productCategory="DIY"><i class="bi bi-camera-reels"></i> DIY</a>
+                                <a class="dropdown-item" asp-controller="Product" asp-action="Index" asp-route-productCategory="Accessories"><i class="bi bi-camera-reels"></i> Accessories</a>
                             </div>
+
                        </li>
                     </ul>
+                    <form class="form-inline my-2 my-lg-0" asp-controller="" asp-action="" style="padding-right: 25px;">
+                        <input name="searchString" type="text" class="form-control" placeholder="SearchForSmth...">
+                        <button class="btn btn-outline success my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
+                    </form>
                 </div>
             </div>
         </nav>
@@ -49,7 +57,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - eCommerceWebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2024 - eCommerceWebApp
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
