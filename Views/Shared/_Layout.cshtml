@@ -20,12 +20,22 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                       <li class="navbar-nav flex-grow-1">
+                           <a class="nav-link text-dark" asp-controller="Product" asp-action="Index"><i class="badge-info bi-box-fill"></i> Products</a>
+                       </li>
+
+                       <li class="nav-item dropdown">
+                           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="button" 
+                           aria-haspopup="true" aria-expanded="false">
+                       <i class="bi bi-gear"></i>Management
+                       </a>
+                       @*Defining all the options below*@
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" asp-controller="" asp-action=""><i class="bi bi-camera-reels"></i>      </a>
+                                <a class="dropdown-item" asp-controller="" asp-action=""><i class="bi bi-camera-reels"></i>      </a>
+                                <a class="dropdown-item" asp-controller="" asp-action=""><i class="bi bi-camera-reels"></i>      </a>
+                            </div>
+                       </li>
                     </ul>
                 </div>
             </div>
