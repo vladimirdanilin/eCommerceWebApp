@@ -118,6 +118,12 @@ namespace eCommerceWebApp.Migrations
                     b.Property<int>("ProductCategory")
                         .HasColumnType("int");
 
+                    b.Property<double>("Quantity")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
+
                     b.HasKey("Id");
 
                     b.ToTable("Products");

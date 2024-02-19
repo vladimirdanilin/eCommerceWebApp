@@ -65,7 +65,9 @@ namespace eCommerceWebApp.Data
                             Name = "Leather Wallet",
                             Description = "Classic leather wallet with card slots and cash compartment.",
                             ProductCategory = ProductCategory.Accessories,
-                            Price = 8.35
+                            Price = 8.35,
+                            Quantity = 5,
+                            Rating = 4.5
                         },
                         new Product()
                         {
@@ -73,7 +75,9 @@ namespace eCommerceWebApp.Data
                             Name = "Women's Handbag",
                             Description = "Elegant handbag for women with spacious interior.",
                             ProductCategory = ProductCategory.Accessories,
-                            Price = 11.25
+                            Price = 11.25,
+                            Quantity = 3,
+                            Rating = 4.3
                         },
                         new Product()
                         {
@@ -81,7 +85,9 @@ namespace eCommerceWebApp.Data
                             Name = "Wireless Headphones",
                             Description = "Premium wireless headphones with noise-canceling technology.",
                             ProductCategory = ProductCategory.Electronics,
-                            Price = 78.59
+                            Price = 78.59,
+                            Quantity = 0,
+                            Rating = 4.6
                         },
                         new Product()
                         {
@@ -89,7 +95,9 @@ namespace eCommerceWebApp.Data
                             Name = "Smartphone Case",
                             Description = "Protective case for smartphones with sleek design.",
                             ProductCategory = ProductCategory.Accessories,
-                            Price = 5.55
+                            Price = 5.55,
+                            Quantity = 1,
+                            Rating = 4.2
                         },
                         new Product()
                         {
@@ -97,7 +105,9 @@ namespace eCommerceWebApp.Data
                             Name = "Running Shoes",
                             Description = "Comfortable running shoes with breathable material.",
                             ProductCategory = ProductCategory.Clothing,
-                            Price = 12.02
+                            Price = 12.02,
+                            Quantity = 19,
+                            Rating = 4.1
                         },
                         new Product()
                         {
@@ -105,7 +115,9 @@ namespace eCommerceWebApp.Data
                             Name = "Stainless Steel Watch",
                             Description = "Durable stainless steel watch with analog display.",
                             ProductCategory = ProductCategory.Accessories,
-                            Price = 9.95
+                            Price = 9.95,
+                            Quantity = 10,
+                            Rating = 4.9
                         },
                         new Product()
                         {
@@ -113,7 +125,9 @@ namespace eCommerceWebApp.Data
                             Name = "Travel Backpack",
                             Description = "Versatile backpack for travel and outdoor activities.",
                             ProductCategory = ProductCategory.Accessories,
-                            Price = 9.95
+                            Price = 9.95,
+                            Quantity = 27,
+                            Rating = 4.6
                         },
                         new Product()
                         {
@@ -121,7 +135,9 @@ namespace eCommerceWebApp.Data
                             Name = "Fitness Tracker",
                             Description = "Smart fitness tracker with heart rate monitoring.",
                             ProductCategory = ProductCategory.Electronics,
-                            Price = 49.99
+                            Price = 49.99,
+                            Quantity = 23,
+                            Rating = 4.7
                         },
                         new Product()
                         {
@@ -129,7 +145,9 @@ namespace eCommerceWebApp.Data
                             Name = "Coffee Maker",
                             Description = "Compact coffee maker for brewing fresh coffee at home.",
                             ProductCategory = ProductCategory.Electronics,
-                            Price = 199.01
+                            Price = 199.01,
+                            Quantity = 10,
+                            Rating = 4.3
                         },
                         new Product()
                         {
@@ -137,7 +155,9 @@ namespace eCommerceWebApp.Data
                             Name = "Portable Charger",
                             Description = "Pocket-sized portable charger for charging devices on the go.",
                             ProductCategory = ProductCategory.Electronics,
-                            Price = 19.15
+                            Price = 19.15,
+                            Quantity = 70,
+                            Rating = 4.0
                         }
                     });
                     context.SaveChanges();

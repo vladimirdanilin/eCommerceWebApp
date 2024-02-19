@@ -28,15 +28,28 @@
                     <div class="col-md-6">
                         <div class="card-body">
                             <p class="card-text">@item.Description</p>
-                            <p class="card-text"><b>Price: </b>@item.Price</p>
-                            <p class="card-text"><b>Category: </b>@item.ProductCategory</p>
+                            <p class="card-text">
+                                <b>Availability:</b>
+                                @if (item.Quantity > 10)
+                                {
+                                    <span class="badge bg-success text-white">IN STOCK</span>   
+                                }
+                                @if (item.Quantity > 0 && item.Quantity <= 10)
+                                {
+                                    <span class="badge bg-warning text-black">IN STOCK @item.Quantity</span>
+                                }
+                                @if (item.Quantity == 0)
+                                {
+                                    <span class="badge bg-danger text-white">OUT OF STOCK</span>
+                                }
+                            </p>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="card-footer">
-                            <p class="card-text">
+                            <p class="card-text justify-content-between d-flex">
                                 <a class="btn btn-outline-primary float-right"><i class="bi bi-eye-fill"></i>Show details</a>
-                                <a class="btn btn-success text-white"><i class="bi bi-cart-plus"></i>Add To Cart</a>
+                                <a class="btn btn-success text-white"><i class="bi bi-cart-plus"></i>Add To Cart For @item.Price $</a>
                             </p>
                         </div>
                     </div>

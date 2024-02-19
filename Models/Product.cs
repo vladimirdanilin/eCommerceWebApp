@@ -20,6 +20,12 @@ namespace eCommerceWebApp.Models
         [Display(Name = "Product Price")]
         public double Price { get; set; }
 
+        [Display(Name = "Product Rating")]
+        public double Rating { get; set; }
+
+        [Display(Name = "Product Quantity In Stock")]
+        public double Quantity { get; set; }
+
         public ProductCategory ProductCategory { get; set; }
 
         //Relationships

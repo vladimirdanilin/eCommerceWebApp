@@ -12,8 +12,8 @@ using eCommerceWebApp.Data;
 namespace eCommerceWebApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240219015229_Migration1")]
-    partial class Migration1
+    [Migration("20240219023029_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -120,6 +120,12 @@ namespace eCommerceWebApp.Migrations
 
                     b.Property<int>("ProductCategory")
                         .HasColumnType("int");
+
+                    b.Property<double>("Quantity")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
