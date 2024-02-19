@@ -64,70 +64,80 @@ namespace eCommerceWebApp.Data
                             PictureURL = "https://via.placeholder.com/500",
                             Name = "Leather Wallet",
                             Description = "Classic leather wallet with card slots and cash compartment.",
-                            ProductCategory = ProductCategory.Accessories
+                            ProductCategory = ProductCategory.Accessories,
+                            Price = 8.35
                         },
                         new Product()
                         {
                             PictureURL = "https://via.placeholder.com/500",
                             Name = "Women's Handbag",
                             Description = "Elegant handbag for women with spacious interior.",
-                            ProductCategory = ProductCategory.Accessories
+                            ProductCategory = ProductCategory.Accessories,
+                            Price = 11.25
                         },
                         new Product()
                         {
                             PictureURL = "https://via.placeholder.com/500",
                             Name = "Wireless Headphones",
                             Description = "Premium wireless headphones with noise-canceling technology.",
-                            ProductCategory = ProductCategory.Electronics
+                            ProductCategory = ProductCategory.Electronics,
+                            Price = 78.59
                         },
                         new Product()
                         {
                             PictureURL = "https://via.placeholder.com/500",
                             Name = "Smartphone Case",
                             Description = "Protective case for smartphones with sleek design.",
-                            ProductCategory = ProductCategory.Accessories
+                            ProductCategory = ProductCategory.Accessories,
+                            Price = 5.55
                         },
                         new Product()
                         {
                             PictureURL = "https://via.placeholder.com/500",
                             Name = "Running Shoes",
                             Description = "Comfortable running shoes with breathable material.",
-                            ProductCategory = ProductCategory.Clothing
+                            ProductCategory = ProductCategory.Clothing,
+                            Price = 12.02
                         },
                         new Product()
                         {
                             PictureURL = "https://via.placeholder.com/500",
                             Name = "Stainless Steel Watch",
                             Description = "Durable stainless steel watch with analog display.",
-                            ProductCategory = ProductCategory.Accessories
+                            ProductCategory = ProductCategory.Accessories,
+                            Price = 9.95
                         },
                         new Product()
                         {
                             PictureURL = "https://via.placeholder.com/500",
                             Name = "Travel Backpack",
                             Description = "Versatile backpack for travel and outdoor activities.",
-                            ProductCategory = ProductCategory.Accessories
+                            ProductCategory = ProductCategory.Accessories,
+                            Price = 9.95
                         },
                         new Product()
                         {
                             PictureURL = "https://via.placeholder.com/500",
                             Name = "Fitness Tracker",
                             Description = "Smart fitness tracker with heart rate monitoring.",
-                            ProductCategory = ProductCategory.Electronics
+                            ProductCategory = ProductCategory.Electronics,
+                            Price = 49.99
                         },
                         new Product()
                         {
                             PictureURL = "https://via.placeholder.com/500",
                             Name = "Coffee Maker",
                             Description = "Compact coffee maker for brewing fresh coffee at home.",
-                            ProductCategory = ProductCategory.Electronics
+                            ProductCategory = ProductCategory.Electronics,
+                            Price = 199.01
                         },
                         new Product()
                         {
                             PictureURL = "https://via.placeholder.com/500",
                             Name = "Portable Charger",
                             Description = "Pocket-sized portable charger for charging devices on the go.",
-                            ProductCategory = ProductCategory.Electronics
+                            ProductCategory = ProductCategory.Electronics,
+                            Price = 19.15
                         }
                     });
                     context.SaveChanges();

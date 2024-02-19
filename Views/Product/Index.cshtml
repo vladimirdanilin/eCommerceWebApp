@@ -7,39 +7,41 @@
 @*Write Code*@
 
 <div class="row">
-    <div class="col-md-8 offset-md-2">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.PictureURL)</th>
-                    <th>@Html.DisplayNameFor(model => model.Name)</th>
-                    <th>@Html.DisplayNameFor(model => model.Description)</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td class ="align-middle">
-                            <img class="rounded-circle" src="@item.PictureURL" alt="@item.Name" style="max-width: 150px"></img>
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Description)
-                        </td>
-                        <td class="align-middle">
-                            <div class="btn-group">
-                                <a class="btn btn-outline-primary"><i class="bi bi-pencil-square"></i>Edit </a>
-                                <a class="btn btn-outline-info"><i class="bi bi-eye-square"></i>Details </a>
-                                <a class="btn btn-danger text-white"><i class="bi bi-trash"></i>Delete </a>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    @foreach (var item in Model)    //Model is IEnumerable<Product>
+    {
+        <div class="col-md-4 col-xs-6 border-primary mb-3">
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-12">
+                        <div class="card-header text-white bg-info">
+                            <p class="card-text">
+                                <h5 class="card-title">
+                                    @item.Name
+                                    <a class="text-white float-right"><i class="bi bi-pencil-square"></i></a>
+                                </h5>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <img src="@item.PictureURL" width="100%" alt="@item.Name"></img>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <p class="card-text">@item.Description</p>
+                            <p class="card-text"><b>Price: </b>@item.Price</p>
+                            <p class="card-text"><b>Category: </b>@item.ProductCategory</p>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card-footer">
+                            <p class="card-text">
+                                <a class="btn btn-outline-primary float-right"><i class="bi bi-eye-fill"></i>Show details</a>
+                                <a class="btn btn-success text-white"><i class="bi bi-cart-plus"></i>Add To Cart</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>
