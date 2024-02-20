@@ -41,9 +41,11 @@
 
                        </li>
                     </ul>
-                    <form class="form-inline my-2 my-lg-0" asp-controller="" asp-action="" style="padding-right: 25px;">
-                        <input name="searchString" type="text" class="form-control" placeholder="SearchForSmth...">
-                        <button class="btn btn-outline success my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
+                    <form class="d-flex" asp-controller="Product" asp-action="Search">
+                        <input name="searchString" type="text" class="form-control" placeholder="Search for what you need..">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline success border border-success" type="submit"><i class="bi bi-search"></i></button>
+                        </div>
                     </form>
                 </div>
             </div>
