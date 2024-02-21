@@ -14,7 +14,8 @@ namespace eCommerceWebApp.Data.Services
 
         public void AddProduct(Product product)
         {
-            throw new NotImplementedException();
+            _context.Products.Add(product);
+            _context.SaveChanges();
         }
 
         public void DeleteProduct(int id)
