@@ -1,5 +1,6 @@
 ﻿using eCommerceWebApp.Data;
 using eCommerceWebApp.Data.Enums;
+using eCommerceWebApp.Data.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,20 +8,20 @@ namespace eCommerceWebApp.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IProductService _service;
 
-        public ProductController(AppDbContext context)
+        public ProductController(IProductService service)
         {
-            _context = context;
+            _service = service;
         }
 
         public async Task<IActionResult> Index(ProductCategory? productCategory)
         {
-            var allProducts = await _context.Products.ToListAsync();
+            var allProducts = await _service.GetAllProducts();
 
             if (productCategory != null)
             {
-                allProducts = await _context.Products.Where(p => p.ProductCategory == productCategory).ToListAsync();
+                allProducts = allProducts.Where(p => p.ProductCategory == productCategory);
             }
             return View(allProducts);
         }

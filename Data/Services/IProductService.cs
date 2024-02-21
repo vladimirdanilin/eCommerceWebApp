@@ -4,14 +4,14 @@ namespace eCommerceWebApp.Data.Services
 {
     public interface IProductService
     {
-        IEnumerable<Product> GetAllProducts();
+        Task<IEnumerable<Product>> GetAllProducts();
 
-        Product GetById(int id);
+        Product GetProductById(int id);
 
-        void Add(Product product);
+        void AddProduct(Product product);
 
-        Product Update(int id, Product newProduct);
+        Product UpdateProduct(int id, Product newProduct);
 
-        void Delete(int id);
+        void DeleteProduct(int id);
     }
 }
