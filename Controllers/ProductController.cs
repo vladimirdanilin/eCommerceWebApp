@@ -25,5 +25,11 @@ namespace eCommerceWebApp.Controllers
             }
             return View(allProducts);
         }
+
+        //Get: Product/CreateProduct
+        public async Task<IActionResult> AddProduct()
+        {
+        return View();
+        }
     }
 }
