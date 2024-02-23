@@ -4,11 +4,11 @@ namespace eCommerceWebApp.Data.Services
 {
     public interface IProductService
     {
-        Task<IEnumerable<Product>> GetAllProducts();
+        Task<IEnumerable<Product>> GetAllProductsAsync();
 
-        Product GetProductById(int id);
+        Task<Product> GetProductByIdAsync(int id);
 
-        void AddProduct(Product product);
+        Task AddProductAsync(Product product);
 
         Product UpdateProduct(int id, Product newProduct);
 

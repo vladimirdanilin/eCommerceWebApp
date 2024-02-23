@@ -18,7 +18,7 @@ namespace eCommerceWebApp.Controllers
 
         public async Task<IActionResult> Index(ProductCategory? productCategory)
         {
-            var allProducts = await _service.GetAllProducts();
+            var allProducts = await _service.GetAllProductsAsync();
 
             if (productCategory != null)
             {
@@ -43,9 +43,19 @@ namespace eCommerceWebApp.Controllers
             }
             else
             { 
-            _service.AddProduct(product);
+            await _service.AddProductAsync(product);
             }
             return RedirectToAction(nameof(Index));
+        }
+
+        //Get: Product/GetDetails/id
+
+        public async Task<IActionResult> GetDetails(int id)
+        { 
+        var productDetails = await _service.GetProductByIdAsync(id);
+
+            if (productDetails == null) return View("Empty");
+                    return View(productDetails);
         }
     }
 }

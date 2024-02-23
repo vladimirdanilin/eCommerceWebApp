@@ -4,7 +4,6 @@
     ViewData["title"] = "ListOfProducts";
 }
 
-@*Write Code*@
 
 <div class="row">
     @foreach (var item in Model)    //Model is IEnumerable<Product>
@@ -48,7 +47,7 @@
                     <div class="col-md-12">
                         <div class="card-footer">
                             <p class="card-text justify-content-between d-flex">
-                                <a class="btn btn-outline-primary float-right"><i class="bi bi-eye-fill"></i>Show details</a>
+                                <a class="btn btn-outline-info float-right" asp-controller="Product" asp-action="GetDetails" asp-route-id="@item.Id"><i class="bi bi-eye-fill"></i>Show details</a>
                                 <a class="btn btn-success text-white"><i class="bi bi-cart-plus"></i>Add To Cart For @item.Price $</a>
                             </p>
                         </div>

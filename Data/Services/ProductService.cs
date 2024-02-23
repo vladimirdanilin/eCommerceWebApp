@@ -12,10 +12,10 @@ namespace eCommerceWebApp.Data.Services
             _context = context;
         }
 
-        public void AddProduct(Product product)
+        public async Task AddProductAsync(Product product)
         {
-            _context.Products.Add(product);
-            _context.SaveChanges();
+            await _context.Products.AddAsync(product);
+            await _context.SaveChangesAsync();
         }
 
         public void DeleteProduct(int id)
@@ -23,15 +23,16 @@ namespace eCommerceWebApp.Data.Services
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Product>> GetAllProducts()
+        public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
             var result = await _context.Products.ToListAsync();
             return result;
         }
 
-        public Product GetProductById(int id)
+        public async Task<Product> GetProductByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var result = await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
+            return result;
         }
 
         public Product UpdateProduct(int id, Product newProduct)
