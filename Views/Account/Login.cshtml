@@ -1,0 +1,24 @@
+﻿@model LoginModel
+
+<h2>Logging in</h2>
+
+<a asp-action="Register" asp-controller="Account">Registration</a>
+
+<form asp-action="Login" asp-controller="Account" asp-antiforgery="true">
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
+    <div>
+        <div class="form-group">
+            <label asp-for="Email">Enter Email</label>
+            <input type="text" asp-for="Email">
+            <span asp-validation-for="Email"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Password">Enter Password</label>
+            <input asp-for="Password"></>
+            <span asp-validation-for="Password"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Enter" class="btn btn-outline-dark">
+        </div>
+    </div>
+</form>
