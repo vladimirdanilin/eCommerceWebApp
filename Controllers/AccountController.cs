@@ -18,7 +18,6 @@ namespace eCommerceWebApp.Controllers
         }
 
         [HttpGet]
-        [ValidateAntiForgeryToken]
 
         public IActionResult Login()
         {
@@ -36,12 +35,12 @@ namespace eCommerceWebApp.Controllers
                 {
                     await Authenticate(model.Email);
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Product");
                 }
                 ModelState.AddModelError("", "Incorrect Login and(or) Password");
             }
             return View(model);
-        }
+        }   
 
         [HttpGet]
         public IActionResult Register()
@@ -58,12 +57,12 @@ namespace eCommerceWebApp.Controllers
                 User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
                 if (user == null)
                 {
-                    _context.Users.Add(new User { Email = model.Email, Password = model.Password });
+                    _context.Users.Add(new User { FullName = model.FullName, Email = model.Email, Password = model.Password });
                     await _context.SaveChangesAsync();
 
                     await Authenticate(model.Email);
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Product");
                 }
                 else
                 {

@@ -6,22 +6,28 @@
     <div class="validation" asp-validation-summary="ModelOnly"></div>
     <div>
         <div>
+            <label asp-for="FullName">Enter Full Name</label><br />
+            <input type="text" asp-for="FullName" />
+            <span asp-validation-for="FullName"></span>
+        </div>
+        <div>
             <label asp-for="Email">Enter Email</label><br />
             <input type="text" asp-for="Email" />
-            <span asp-validation-for="Email" />
+            <span asp-validation-for="Email"></span>
         </div>
         <div>
             <label asp-for="Password">Enter Password</label><br />
             <input asp-for="Password" />
-            <span asp-validation-for="Password" />
+            <span asp-validation-for="Password"></span>
         </div>
         <div>
             <label asp-for="ConfirmPassword">Confirm Password</label><br />
             <input asp-for="ConfirmPassword" />
-            <span asp-validation-for="ConfirmPassword" />
+            <span asp-validation-for="ConfirmPassword"></span>
         </div>
+        <br />
         <div>
-            <input type="submit" value="Registration" />
+            <input type="submit" value="Registration" class="btn btn-outline-dark" />
         </div>
     </div>
 </form>

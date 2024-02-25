@@ -4,6 +4,9 @@ namespace eCommerceWebApp.Models
 {
     public class RegisterModel
     {
+        [Required(ErrorMessage = "Full name is not specified")]
+        public string FullName { get; set; }
+
         [Required(ErrorMessage = "Email is not specified")]
         public string Email { get; set; }
 
