@@ -18,6 +18,8 @@ namespace eCommerceWebApp.Models
 
         //public List<Address> ShippingAddresses { get; set; }
 
+        public ShoppingCart? ShoppingCart { get; set; }
+
         public string? ProfilePictureURL { get; set; }
 
         public List<Order>? Orders { get; set; }

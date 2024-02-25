@@ -46,5 +46,9 @@ namespace eCommerceWebApp.Data
         public DbSet<User_Address> Users_Addresses { get; set; }
 
         public DbSet<Address> Addresses { get; set; }
+
+        public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+
+        public DbSet<CartItem> CartItems { get; set; }
     }
 }

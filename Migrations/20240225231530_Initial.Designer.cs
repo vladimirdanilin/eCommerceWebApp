@@ -12,7 +12,7 @@ using eCommerceWebApp.Data;
 namespace eCommerceWebApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240225031616_Initial")]
+    [Migration("20240225231530_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -52,6 +52,32 @@ namespace eCommerceWebApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Addresses");
+                });
+
+            modelBuilder.Entity("eCommerceWebApp.Models.CartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ShoppingCartId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ShoppingCartId");
+
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("eCommerceWebApp.Models.Order", b =>
@@ -133,6 +159,28 @@ namespace eCommerceWebApp.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("eCommerceWebApp.Models.ShoppingCart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("float");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("ShoppingCarts");
+                });
+
             modelBuilder.Entity("eCommerceWebApp.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -179,6 +227,21 @@ namespace eCommerceWebApp.Migrations
                     b.ToTable("Users_Addresses");
                 });
 
+            modelBuilder.Entity("eCommerceWebApp.Models.CartItem", b =>
+                {
+                    b.HasOne("eCommerceWebApp.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("eCommerceWebApp.Models.ShoppingCart", null)
+                        .WithMany("CartItems")
+                        .HasForeignKey("ShoppingCartId");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("eCommerceWebApp.Models.Order", b =>
                 {
                     b.HasOne("eCommerceWebApp.Models.Address", "ShippingAddress")
@@ -217,6 +280,17 @@ namespace eCommerceWebApp.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("eCommerceWebApp.Models.ShoppingCart", b =>
+                {
+                    b.HasOne("eCommerceWebApp.Models.User", "User")
+                        .WithOne("ShoppingCart")
+                        .HasForeignKey("eCommerceWebApp.Models.ShoppingCart", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("eCommerceWebApp.Models.User_Address", b =>
                 {
                     b.HasOne("eCommerceWebApp.Models.Address", "Address")
@@ -251,9 +325,16 @@ namespace eCommerceWebApp.Migrations
                     b.Navigation("Orders_Products");
                 });
 
+            modelBuilder.Entity("eCommerceWebApp.Models.ShoppingCart", b =>
+                {
+                    b.Navigation("CartItems");
+                });
+
             modelBuilder.Entity("eCommerceWebApp.Models.User", b =>
                 {
                     b.Navigation("Orders");
+
+                    b.Navigation("ShoppingCart");
 
                     b.Navigation("Users_Addresses");
                 });
