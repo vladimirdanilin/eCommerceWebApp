@@ -48,19 +48,22 @@
                         </div>
                     </form>
                     <ul class="navbar-nav flex-grow">
-                        @if (!User.Identity.IsAuthenticated)
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="navbar-nav flex-grow">
+                                <a class="nav-link text-dark" asp-controller="ShoppingCart" asp-action="Index"><i class="bi bi-bag-check"></i> Cart</a>
+                            </li>
+                            <li class="navbar-nav flex-grow">
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout"><i class="bi bi-box-arrow-in-right"></i> Log Out</a>
+                            </li>
+                        }
+                        else
                         {
                             <li class="navbar-nav flex-grow">
                                 <a class="nav-link text-dark" asp-controller="Account" asp-action="Login"><i class="bi bi-box-arrow-in-left"></i> Login</a>
                             </li>
                             <li class="navbar-nav flex-grow">
                                 <a class="nav-link text-dark" asp-controller="Account" asp-action="Register"><i class="bi bi-person-add"></i> Register</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="navbar-nav flex-grow">
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout"><i class="bi bi-box-arrow-in-right"></i> Log Out</a>
                             </li>
                         }
                     </ul>

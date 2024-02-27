@@ -1,0 +1,34 @@
+﻿@model ShoppingCart
+
+<h2>Shopping cart</h2>
+
+@if (Model != null && Model.CartItems.Any())
+{
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total Price</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach(var item in Model.CartItems)
+            {
+                <tr>
+                    <td>@item.Product.Name</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Product.Price</td>
+                    <td>@(item.Quantity*item.Product.Price)</td>
+                </tr>
+            }
+        </tbody>
+</table>    
+<p>Total Price: @Model.TotalPrice</p>
+}
+else
+{
+    <p>Your cart is empty</p>
+}
