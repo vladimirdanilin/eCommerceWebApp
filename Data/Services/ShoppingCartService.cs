@@ -22,10 +22,12 @@ namespace eCommerceWebApp.Data.Services
             //If the cart does not exist, create a new one
             if (cart == null)
             {
-                await _context.ShoppingCarts.AddAsync(new ShoppingCart
+                await _context.ShoppingCarts.AddAsync(new ShoppingCart()
                 {
                     UserId = userId
                 });
+                await _context.SaveChangesAsync();
+                cart = await _context.ShoppingCarts.Include(c => c.CartItems).FirstOrDefaultAsync(c => c.UserId == userId);
             }
 
             //Checking whether the item is in the cart
@@ -37,18 +39,28 @@ namespace eCommerceWebApp.Data.Services
             }
             else
             {
-                cart.CartItems.Add(new CartItem
+                Product product = _context.Products.FirstOrDefault(p => p.Id == productId);
+                cart.CartItems.Add(new CartItem()
                 {
                     ProductId = productId,
-                    Quantity = quantity
+                    Product = product,
+                    Quantity = quantity,
+                    TotalUnitPrice = Math.Round(quantity * product.Price, 2)
                 });
             }
+
             await _context.SaveChangesAsync();
         }
 
         public async Task<ShoppingCart> GetCartAsync(int userId)
         {
-            var cart = await _context.ShoppingCarts.Include(c => c.CartItems).FirstOrDefaultAsync(c => c.UserId == userId);
+            var cart = await _context.ShoppingCarts.Include(c => c.CartItems).ThenInclude(p => p.Product).FirstOrDefaultAsync(c => c.UserId == userId);
+            cart.TotalPrice = 0;
+            foreach (var item in cart.CartItems)
+            {
+                cart.TotalPrice += item.Product.Price * item.Quantity;
+            }
+            await _context.SaveChangesAsync();
             return cart;
         }
 

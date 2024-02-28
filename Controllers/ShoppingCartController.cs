@@ -21,5 +21,19 @@ namespace eCommerceWebApp.Controllers
 
             return View(cart);
         }
+
+        public async Task<IActionResult> AddItemToCart(int productId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            else
+            {
+                int userId = await _shoppingCartService.GetCurrentUserIdAsync();
+                await _shoppingCartService.AddItemToCartAsync(userId, productId, 1);
+                return RedirectToAction("Index", "ShoppingCart");
+            }
+        }
     }
 }

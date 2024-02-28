@@ -48,7 +48,7 @@
                         <div class="card-footer">
                             <p class="card-text justify-content-between d-flex">
                                 <a class="btn btn-outline-info float-right" asp-controller="Product" asp-action="GetDetails" asp-route-id="@item.Id"><i class="bi bi-eye-fill"></i>Show details</a>
-                                <a class="btn btn-success text-white"><i class="bi bi-cart-plus"></i>Add To Cart For @item.Price $</a>
+                                <a class="btn btn-success text-white" asp-controller="ShoppingCart" asp-action="AddItemToCart" asp-route-productId="@item.Id"><i class="bi bi-cart-plus"></i>Add To Cart For @item.Price $</a>
                             </p>
                         </div>
                     </div>

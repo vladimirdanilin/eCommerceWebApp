@@ -12,7 +12,7 @@ using eCommerceWebApp.Data;
 namespace eCommerceWebApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240225231530_Initial")]
+    [Migration("20240228045926_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -68,8 +68,11 @@ namespace eCommerceWebApp.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ShoppingCartId")
+                    b.Property<int>("ShoppingCartId")
                         .HasColumnType("int");
+
+                    b.Property<double>("TotalUnitPrice")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -235,11 +238,15 @@ namespace eCommerceWebApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("eCommerceWebApp.Models.ShoppingCart", null)
+                    b.HasOne("eCommerceWebApp.Models.ShoppingCart", "ShoppingCart")
                         .WithMany("CartItems")
-                        .HasForeignKey("ShoppingCartId");
+                        .HasForeignKey("ShoppingCartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Product");
+
+                    b.Navigation("ShoppingCart");
                 });
 
             modelBuilder.Entity("eCommerceWebApp.Models.Order", b =>
