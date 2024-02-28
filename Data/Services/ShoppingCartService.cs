@@ -55,12 +55,15 @@ namespace eCommerceWebApp.Data.Services
         public async Task<ShoppingCart> GetCartAsync(int userId)
         {
             var cart = await _context.ShoppingCarts.Include(c => c.CartItems).ThenInclude(p => p.Product).FirstOrDefaultAsync(c => c.UserId == userId);
-            cart.TotalPrice = 0;
-            foreach (var item in cart.CartItems)
+            if (cart != null)
             {
-                cart.TotalPrice += item.Product.Price * item.Quantity;
+                cart.TotalPrice = 0;
+                foreach (var item in cart.CartItems)
+                {
+                    cart.TotalPrice += item.Product.Price * item.Quantity;
+                }
+                await _context.SaveChangesAsync();
             }
-            await _context.SaveChangesAsync();
             return cart;
         }
 
@@ -78,10 +81,15 @@ namespace eCommerceWebApp.Data.Services
             var cart = await _context.ShoppingCarts.Include(c => c.CartItems).FirstOrDefaultAsync(c => c.UserId == userId);
             var item = cart.CartItems.FirstOrDefault(item => item.ProductId == productId);
 
-            if (cart.CartItems.Contains(item))
+            if (cart.CartItems.Contains(item) && item.Quantity > 0)
             {
+                item.Quantity -= 1;
+            }
+            if (cart.CartItems.Contains(item) && item.Quantity == 0)
+            { 
                 cart.CartItems.Remove(item);
             }
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -22,6 +22,13 @@
                     <td>@item.Quantity</td>
                     <td>@item.Product.Price</td>
                     <td>@item.TotalUnitPrice</td>
+                    <td>
+                        <div class="text-center">
+                            <a class="btn btn-primary" asp-controller="ShoppingCart" asp-action="RemoveItemFromCart" asp-route-productId="@item.ProductId">
+                                <i class="bi bi-box-arrow-in-left"></i> Remove
+                            </a>
+                        </div>
+                    </td>
                 </tr>
             }
         </tbody>

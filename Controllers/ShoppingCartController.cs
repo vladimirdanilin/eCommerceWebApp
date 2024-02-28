@@ -35,5 +35,19 @@ namespace eCommerceWebApp.Controllers
                 return RedirectToAction("Index", "ShoppingCart");
             }
         }
+
+        public async Task<IActionResult> RemoveItemFromCart(int productId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            else
+            {
+                int userId = await _shoppingCartService.GetCurrentUserIdAsync();
+                await _shoppingCartService.RemoveItemFromCartAsync(userId, productId, 1);
+                return RedirectToAction("Index", "ShoppingCart");
+            }
+        }
     }
 }
