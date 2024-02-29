@@ -41,7 +41,7 @@
 
                        </li>
                     </ul>
-                    <form class="d-flex" asp-controller="Product" asp-action="Search">
+                    <form method="post" class="d-flex" asp-controller="Product" asp-action="SearchForProduct">
                         <input name="searchString" type="text" class="form-control" placeholder="Search for what you need..">
                         <div class="input-group-append">
                             <button class="btn btn-outline success border border-success" type="submit"><i class="bi bi-search"></i></button>

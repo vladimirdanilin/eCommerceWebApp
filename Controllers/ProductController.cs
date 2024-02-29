@@ -54,8 +54,27 @@ namespace eCommerceWebApp.Controllers
         { 
         var productDetails = await _service.GetProductByIdAsync(id);
 
-            if (productDetails == null) return View("Empty");
-                    return View(productDetails);
+            if (productDetails == null)
+            {
+                return View("Empty");
+            }
+            else
+            {
+                return View(productDetails);
+            }
+        }
+
+        public IActionResult SearchForProduct(string searchString)
+        {
+            List<Product> searchedProducts = _service.SearchForProduct(searchString);
+            if (searchedProducts.Any())
+            {
+                return View("Index", searchedProducts);
+            }
+            else
+            {
+                return View("Empty");
+            }
         }
     }
 }

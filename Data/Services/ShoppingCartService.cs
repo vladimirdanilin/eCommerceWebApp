@@ -62,6 +62,7 @@ namespace eCommerceWebApp.Data.Services
                 {
                     cart.TotalPrice += item.Product.Price * item.Quantity;
                 }
+                cart.TotalPrice = Math.Round(cart.TotalPrice, 2);
                 await _context.SaveChangesAsync();
             }
             return cart;

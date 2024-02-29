@@ -18,7 +18,7 @@ namespace eCommerceWebApp.Data.Services
             await _context.SaveChangesAsync();
         }
 
-        public void DeleteProduct(int id)
+        public void DeleteProductAsync(int id)
         {
             throw new NotImplementedException();
         }
@@ -35,7 +35,21 @@ namespace eCommerceWebApp.Data.Services
             return result;
         }
 
-        public Product UpdateProduct(int id, Product newProduct)
+        public List<Product> SearchForProduct(string searchString)
+        {
+            List<Product> searchedProducts = new List<Product>();
+
+            foreach (var item in _context.Products)
+            {
+                if (item.Name.ToLower().Contains(searchString.ToLower()))
+                { 
+                searchedProducts.Add(item);
+                }
+            }
+            return searchedProducts;
+        }
+
+        public async Task<Product> UpdateProductAsync(int id, Product newProduct)
         {
             throw new NotImplementedException();
         }

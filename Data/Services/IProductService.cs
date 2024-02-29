@@ -10,8 +10,10 @@ namespace eCommerceWebApp.Data.Services
 
         Task AddProductAsync(Product product);
 
-        Product UpdateProduct(int id, Product newProduct);
+        Task<Product> UpdateProductAsync(int id, Product newProduct);
 
-        void DeleteProduct(int id);
+        List<Product> SearchForProduct(string searchString);
+
+        void DeleteProductAsync(int id);
     }
 }
