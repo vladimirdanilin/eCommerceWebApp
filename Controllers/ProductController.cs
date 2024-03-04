@@ -34,7 +34,6 @@ namespace eCommerceWebApp.Controllers
         }
 
         [HttpPost]
-
         public async Task<IActionResult> AddProduct([Bind("PictureURL, Name, Description, Price")]Product product)
         {
             if (!ModelState.IsValid)
@@ -75,6 +74,25 @@ namespace eCommerceWebApp.Controllers
             {
                 return View("Empty");
             }
+        }
+
+        //Action to display the form to edit
+        public async Task<IActionResult> EditProduct(int productId)
+        { 
+            var productDetails = await _service.GetProductByIdAsync(productId);
+
+            return View(productDetails);
+        }
+
+        //Updates the edited product in the database
+        [HttpPost]
+        public async Task<IActionResult> UpdateProduct(Product product)
+        {
+            if (ModelState.IsValid)
+            {
+                await _service.EditProductAsync(product);
+            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }

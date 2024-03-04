@@ -1,5 +1,6 @@
 ﻿using eCommerceWebApp.Data.Services;
 using eCommerceWebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
@@ -22,6 +23,7 @@ namespace eCommerceWebApp.Controllers
             return View(cart);
         }
 
+        [Authorize]
         public async Task<IActionResult> AddItemToCart(int productId)
         {
             if (!ModelState.IsValid)

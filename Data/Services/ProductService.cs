@@ -39,19 +39,38 @@ namespace eCommerceWebApp.Data.Services
         {
             List<Product> searchedProducts = new List<Product>();
 
-            foreach (var item in _context.Products)
-            {
-                if (item.Name.ToLower().Contains(searchString.ToLower()))
-                { 
-                searchedProducts.Add(item);
-                }
-            }
-            return searchedProducts;
+            if (searchString == null)
+                return searchedProducts;
+
+            return _context.Products
+                .Where(p => p.Name.ToLower().Contains(searchString.ToLower()))
+                .ToList();
         }
 
-        public async Task<Product> UpdateProductAsync(int id, Product newProduct)
+        public async Task EditProductAsync(Product editedProduct)
         {
-            throw new NotImplementedException();
+            var existingProduct = await _context.Products.FirstOrDefaultAsync(p => p.Id == editedProduct.Id);
+
+            if (existingProduct == null)
+            {
+
+            }
+            else
+            { 
+                existingProduct.Name = editedProduct.Name;
+                existingProduct.Description = editedProduct.Description;
+                existingProduct.Price = editedProduct.Price;
+                existingProduct.PictureURL = editedProduct.PictureURL;
+                existingProduct.ProductCategory = editedProduct.ProductCategory;
+            }
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
         }
     }
 }
