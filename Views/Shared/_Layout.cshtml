@@ -50,6 +50,20 @@
                     <ul class="navbar-nav flex-grow">
                         @if (User.Identity.IsAuthenticated)
                         {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link text-dark" href="#" id="navbarDropdown" role="button" data-toggle="button" data-bs-toggle="dropdown"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    <i class="bi bi-person-fill"></i> Profile
+                                </a>
+
+                                @*Defining all the options below*@
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" asp-controller="Product" asp-action="Index" asp-route-productCategory="Electronics"><i class="bi bi-bag"></i> Orders</a>
+                                    <a class="dropdown-item" asp-controller="Product" asp-action="Index" asp-route-productCategory="Clothing"><i class="bi bi-house"></i> Addresses</a>
+                                </div>
+
+                            </li>
+
                             <li class="navbar-nav flex-grow">
                                 <a class="nav-link text-dark" asp-controller="ShoppingCart" asp-action="Index"><i class="bi bi-bag-check"></i> Cart</a>
                             </li>
