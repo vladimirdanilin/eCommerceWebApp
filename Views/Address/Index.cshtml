@@ -7,10 +7,9 @@
     <table class="table">
         <thead>
             <tr>
-                <th>AddressId</th>
+                <th>Postal or zip code</th>
                 <th>Country and city</th>
                 <th>Street</th>
-                <th>Postal or zip code</th>
             </tr>
         </thead>
 
@@ -23,7 +22,7 @@
                     <td>@item.Street</td>
                     <td>
                         <div class="text-center">
-                            <a class="btn btn-primary" asp-controller="Address" asp-action="DeleteAddress" asp-route-productId="@item.Id">
+                            <a class="btn btn-primary" asp-controller="Address" asp-action="DeleteAddress" asp-route-addressId="@item.Id">
                                 <i class="bi bi-box-arrow-in-left"></i> Remove
                             </a>
                         </div>

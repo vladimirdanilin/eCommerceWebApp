@@ -35,15 +35,15 @@ namespace eCommerceWebApp.Controllers
         {
             await _addressService.AddAddressAsync(address);
 
-            return View("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         [Authorize]
-        public async Task<IActionResult> DeleteAddress(Address address)
+        public async Task<IActionResult> DeleteAddress(int addressId)
         {
-            await _addressService.DeleteAddressAsync(address.Id);
+            await _addressService.DeleteAddressAsync(addressId);
 
-            return View("Index");
+            return RedirectToAction(nameof(Index));
         }
     }
 }
