@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Address>
+
+<h2>Addresses</h2>
+
+@if (Model != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>AddressId</th>
+                <th>Country and city</th>
+                <th>Street</th>
+                <th>Postal or zip code</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.PostalOrZipCode</td>
+                    <td>@item.Country, @item.City</td>
+                    <td>@item.Street</td>
+                    <td>
+                        <div class="text-center">
+                            <a class="btn btn-primary" asp-controller="Address" asp-action="DeleteAddress" asp-route-productId="@item.Id">
+                                <i class="bi bi-box-arrow-in-left"></i> Remove
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>You don't have addresses</p>
+}
+
+<div style="position: fixed; right: 25px; bottom: 25px;" class="text-white">
+    <a asp-controller="Address" asp-action="AddAddress" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Add New Address
+    </a>
+</div>

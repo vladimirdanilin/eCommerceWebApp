@@ -4,15 +4,17 @@ namespace eCommerceWebApp.Data.Services
 {
     public interface IAddressService
     {
-        Task<Address> GetAddressByIdAsync(int id);
+        Task<Address> GetAddressByIdAsync(int addressId);
 
         Task<List<Address>> GetUserAddressesByUserIdAsync(int userId);
 
-        Task<Address> AddAddressAsync(Address address);
+        Task AddAddressAsync(Address address);
 
         Task<Address> EditAddressAsync(Address address);
 
-        Task<Address> DeleteAddressAsync(int addressId);
+        Task DeleteAddressAsync(int addressId);
+
+        Task<int> GetCurrentUserIdAsync();
 
     }
 }

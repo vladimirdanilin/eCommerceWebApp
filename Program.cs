@@ -13,6 +13,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(conn
 //Services Configuration
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
+builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 //Connection Configuration
