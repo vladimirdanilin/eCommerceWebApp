@@ -18,5 +18,11 @@ namespace eCommerceWebApp.Controllers
             var allOrders = await _context.Orders.ToListAsync();
             return View();
         }
+
+        public async Task<IActionResult> PlaceOrderAsync()
+        {
+            var allOrders = await _context.Orders.ToListAsync();
+            return View();
+        }
     }
 }
