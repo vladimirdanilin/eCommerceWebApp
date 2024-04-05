@@ -30,7 +30,7 @@ namespace eCommerceWebApp.Data
 
             modelBuilder.Entity<User_Address>().HasOne(u => u.User).WithMany(am => am.Users_Addresses).HasForeignKey(u => u.UserId);
             modelBuilder.Entity<User_Address>().HasOne(a => a.Address).WithMany(am => am.Users_Addresses).HasForeignKey(a => a.AddressId);
-        
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -50,5 +50,7 @@ namespace eCommerceWebApp.Data
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
 
         public DbSet<CartItem> CartItems { get; set; }
+
+        public DbSet<Checkout> Checkouts { get; set; }
     }
 }

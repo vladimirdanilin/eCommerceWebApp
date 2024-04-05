@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eCommerceWebApp.Data;
 
@@ -11,9 +12,11 @@ using eCommerceWebApp.Data;
 namespace eCommerceWebApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240405174328_New2")]
+    partial class New2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,7 +101,8 @@ namespace eCommerceWebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderId")
+                        .IsUnique();
 
                     b.ToTable("Checkouts");
                 });
@@ -279,8 +283,8 @@ namespace eCommerceWebApp.Migrations
             modelBuilder.Entity("eCommerceWebApp.Models.Checkout", b =>
                 {
                     b.HasOne("eCommerceWebApp.Models.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
+                        .WithOne("Checkout")
+                        .HasForeignKey("eCommerceWebApp.Models.Checkout", "OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -367,6 +371,9 @@ namespace eCommerceWebApp.Migrations
 
             modelBuilder.Entity("eCommerceWebApp.Models.Order", b =>
                 {
+                    b.Navigation("Checkout")
+                        .IsRequired();
+
                     b.Navigation("Orders_Products");
                 });
 

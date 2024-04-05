@@ -27,25 +27,27 @@ namespace eCommerceWebApp.Data.Services
 
         public async Task PlaceOrderAsync(int shoppingCartId)
         {
-
             var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userName);
 
-            var shoppingCart = await _context.ShoppingCarts.Include(s => s.CartItems).ThenInclude(ci => ci.Product).FirstOrDefaultAsync(s => s.Id == shoppingCartId);
+            var shoppingCart = await _context.ShoppingCarts
+                .Include(s => s.CartItems)
+                .ThenInclude(c => c.Product)
+                .FirstOrDefaultAsync(sc => sc.Id == shoppingCartId);
 
             var order = new Order
             {
                 UserId = user.Id,
-                OrderDate = DateOnly.FromDateTime(DateTime.Now),
-                Orders_Products = new List<Order_Product>()
+                OrderDate = DateOnly.FromDateTime(DateTime.Now)            
             };
 
             foreach (var item in shoppingCart.CartItems)
             {
                 order.Orders_Products.Add(new Order_Product
-                { 
-                    ProductId = item.ProductId,
+                {
+                ProductId = item.ProductId,
+                Product = item.Product
                 });
             }
 
