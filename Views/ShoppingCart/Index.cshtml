@@ -39,3 +39,9 @@ else
 {
     <p>Your cart is empty</p>
 }
+
+<div class="text-left">
+    <a class="btn btn-primary" asp-controller="Order" asp-action="PlaceOrder" asp-route-shoppingCartId="@Model.Id">
+        <i class="bi bi-boxes"></i> Place order
+    </a>
+</div>

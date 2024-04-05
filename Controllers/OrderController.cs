@@ -1,4 +1,7 @@
 ﻿using eCommerceWebApp.Data;
+using eCommerceWebApp.Data.Services;
+using eCommerceWebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,23 +9,17 @@ namespace eCommerceWebApp.Controllers
 {
     public class OrderController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IOrderService _orderService;
 
-        public OrderController(AppDbContext context)
+        public OrderController(IOrderService orderService)
         {
-            _context = context;
+            _orderService = orderService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> PlaceOrder(int shoppingCartId)
         {
-            var allOrders = await _context.Orders.ToListAsync();
-            return View();
-        }
-
-        public async Task<IActionResult> PlaceOrderAsync()
-        {
-            var allOrders = await _context.Orders.ToListAsync();
-            return View();
+            await _orderService.PlaceOrderAsync(shoppingCartId);
+            return RedirectToAction("Index", "Product");
         }
     }
 }

@@ -8,7 +8,7 @@ namespace eCommerceWebApp.Data.Services
 
         Task<Order> GetOrderByIdAsync();
 
-        Task<Order> PlaceOrderAsync();
+        Task PlaceOrderAsync(int shoppingCartId);
 
         Task<Order> CancelOrder();
 
