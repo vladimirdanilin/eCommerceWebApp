@@ -20,5 +20,12 @@ namespace eCommerceWebApp.Controllers
 
             return View(checkout);
         }
+
+        public async Task<IActionResult> AddCheckoutData()
+        {
+
+        }
+
+
     }
 }

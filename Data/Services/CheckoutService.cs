@@ -15,7 +15,7 @@ namespace eCommerceWebApp.Data.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<List<Address>> GetShippingAddressAsync()
+        public async Task<List<Address>> GetAddressesAsync()
         {
             var userAddresses = await _context.Users_Addresses.Where(u => u.UserId == GetUserAsync().Id).Select(u => u.Address).ToListAsync();
 

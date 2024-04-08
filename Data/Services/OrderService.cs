@@ -25,7 +25,7 @@ namespace eCommerceWebApp.Data.Services
             throw new NotImplementedException();
         }
 
-        public async Task PlaceOrderAsync(int shoppingCartId)
+        public async Task<int> PlaceOrderAndGetIdAsync(int shoppingCartId)
         {
             var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
 
@@ -54,6 +54,8 @@ namespace eCommerceWebApp.Data.Services
 
             await _context.Orders.AddAsync(order);
             await _context.SaveChangesAsync();
+
+            return _context.Orders.FirstOrDefaultAsync(o => o == order).Id;
         }
 
         public Task<Order> CancelOrder()
