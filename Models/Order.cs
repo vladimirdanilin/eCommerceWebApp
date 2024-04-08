@@ -23,10 +23,10 @@ namespace eCommerceWebApp.Models
 
         //Address
 
-        public int ShippingAddressId { get; set; }
+        public int? ShippingAddressId { get; set; }
         [ForeignKey("ShippingAddressId")]
 
-        public Address ShippingAddress { get; set; }
+        public Address? ShippingAddress { get; set; }
 
 
 

@@ -15,7 +15,10 @@ namespace eCommerceWebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View();
+            var userAddresses = await _checkoutService.GetAddressesAsync();
+            var checkout = await _checkoutService.AddNewCheckoutAsync(userAddresses);
+
+            return View(checkout);
         }
     }
 }

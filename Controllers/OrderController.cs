@@ -19,7 +19,8 @@ namespace eCommerceWebApp.Controllers
         public async Task<IActionResult> PlaceOrder(int shoppingCartId)
         {
             await _orderService.PlaceOrderAsync(shoppingCartId);
-            return RedirectToAction("Index", "Product");
+            RedirectToAction("ClearShoppingCart", "ShoppingCart", shoppingCartId);
+            return RedirectToAction("Index", "Checkout");
         }
     }
 }

@@ -8,13 +8,10 @@ namespace eCommerceWebApp.Models
         [Key]
         public int Id { get; set; }
 
+        public List<Address> UserAddresses { get; set; }
 
+        public int? OrderId { get; set; }
 
-        public List<Address> userAddresses { get; set; }
-
-        //Relationships
-        public int OrderId { get; set; }
-
-        public Order Order { get; set; }
+        public Order? Order { get; set; }
     }
 }

@@ -11,5 +11,7 @@ namespace eCommerceWebApp.Data.Services
         Task AddItemToCartAsync(int userId, int productId, int quantity);
 
         Task RemoveItemFromCartAsync(int userId, int productId, int quantity);
+
+        Task ClearShoppingCartAsync(int shoppingCartId);
     }
 }

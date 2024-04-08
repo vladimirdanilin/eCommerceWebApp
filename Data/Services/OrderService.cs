@@ -39,7 +39,8 @@ namespace eCommerceWebApp.Data.Services
             var order = new Order
             {
                 UserId = user.Id,
-                OrderDate = DateOnly.FromDateTime(DateTime.Now)            
+                OrderDate = DateOnly.FromDateTime(DateTime.Now),
+                Orders_Products = new List<Order_Product>()
             };
 
             foreach (var item in shoppingCart.CartItems)

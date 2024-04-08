@@ -52,6 +52,13 @@ namespace eCommerceWebApp.Data.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task ClearShoppingCartAsync(int shoppingCartId)
+        {
+            var shoppingCartToRemove = await _context.ShoppingCarts.FirstOrDefaultAsync(s => s.Id == shoppingCartId);
+            _context.ShoppingCarts.Remove(shoppingCartToRemove);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<ShoppingCart> GetCartAsync(int userId)
         {
             var cart = await _context.ShoppingCarts.Include(c => c.CartItems).ThenInclude(p => p.Product).FirstOrDefaultAsync(c => c.UserId == userId);

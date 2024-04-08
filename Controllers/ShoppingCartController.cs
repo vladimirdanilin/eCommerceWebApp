@@ -51,5 +51,10 @@ namespace eCommerceWebApp.Controllers
                 return RedirectToAction("Index", "ShoppingCart");
             }
         }
+
+        public async Task ClearShoppingCart(int shoppingCartId)
+        { 
+            await _shoppingCartService.ClearShoppingCartAsync(shoppingCartId);
+        }
     }
 }

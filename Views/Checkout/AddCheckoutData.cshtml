@@ -1,0 +1,31 @@
+﻿@model Checkout
+
+<h2>Checkout</h2>
+
+@if (Model != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Address</th>
+                <th>City</th>
+                <th>Postal or ZIP code</th>
+                <th>Country</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model.UserAddresses)
+            {
+                <tr>
+                    <td>@item.Street</td>
+                    <td>@item.City</td>
+                    <td>@item.PostalOrZipCode</td>
+                    <td>@item.Country</td>
+                    <td>
+                       
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
