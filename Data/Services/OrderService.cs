@@ -55,7 +55,7 @@ namespace eCommerceWebApp.Data.Services
             await _context.Orders.AddAsync(order);
             await _context.SaveChangesAsync();
 
-            return _context.Orders.FirstOrDefaultAsync(o => o == order).Id;
+            return order.Id;
         }
 
         public Task<Order> CancelOrder()

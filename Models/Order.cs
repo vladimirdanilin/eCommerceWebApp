@@ -28,6 +28,9 @@ namespace eCommerceWebApp.Models
 
         public Address? ShippingAddress { get; set; }
 
+        //Checkout
+        public Checkout? Checkout { get; set; } 
+
 
 
     }

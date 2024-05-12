@@ -4,9 +4,9 @@ namespace eCommerceWebApp.Data.Services
 {
     public interface ICheckoutService
     {
-        Task<List<Address>> GetAddressesAsync();
+        Task<List<Address>> GetAddressesAsync(int userId);
 
-        Task<Checkout> AddNewCheckoutAsync(List<Address> userAddresses);
+        Task<Checkout> AddNewCheckoutAsync(int orderId);
 
         Task<User> GetUserAsync();
     }

@@ -12,8 +12,8 @@ using eCommerceWebApp.Data;
 namespace eCommerceWebApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240405173356_New1")]
-    partial class New1
+    [Migration("20240508090934_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -96,12 +96,14 @@ namespace eCommerceWebApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("OrderId")
+                    b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderId")
+                        .IsUnique()
+                        .HasFilter("[OrderId] IS NOT NULL");
 
                     b.ToTable("Checkouts");
                 });
@@ -117,7 +119,7 @@ namespace eCommerceWebApp.Migrations
                     b.Property<DateOnly>("OrderDate")
                         .HasColumnType("date");
 
-                    b.Property<int>("ShippingAddressId")
+                    b.Property<int?>("ShippingAddressId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
@@ -256,7 +258,7 @@ namespace eCommerceWebApp.Migrations
             modelBuilder.Entity("eCommerceWebApp.Models.Address", b =>
                 {
                     b.HasOne("eCommerceWebApp.Models.Checkout", null)
-                        .WithMany("userAddresses")
+                        .WithMany("UserAddresses")
                         .HasForeignKey("CheckoutId");
                 });
 
@@ -282,10 +284,8 @@ namespace eCommerceWebApp.Migrations
             modelBuilder.Entity("eCommerceWebApp.Models.Checkout", b =>
                 {
                     b.HasOne("eCommerceWebApp.Models.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithOne("Checkout")
+                        .HasForeignKey("eCommerceWebApp.Models.Checkout", "OrderId");
 
                     b.Navigation("Order");
                 });
@@ -294,9 +294,7 @@ namespace eCommerceWebApp.Migrations
                 {
                     b.HasOne("eCommerceWebApp.Models.Address", "ShippingAddress")
                         .WithMany()
-                        .HasForeignKey("ShippingAddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ShippingAddressId");
 
                     b.HasOne("eCommerceWebApp.Models.User", "User")
                         .WithMany("Orders")
@@ -365,11 +363,13 @@ namespace eCommerceWebApp.Migrations
 
             modelBuilder.Entity("eCommerceWebApp.Models.Checkout", b =>
                 {
-                    b.Navigation("userAddresses");
+                    b.Navigation("UserAddresses");
                 });
 
             modelBuilder.Entity("eCommerceWebApp.Models.Order", b =>
                 {
+                    b.Navigation("Checkout");
+
                     b.Navigation("Orders_Products");
                 });
 

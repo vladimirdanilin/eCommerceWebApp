@@ -15,22 +15,29 @@ namespace eCommerceWebApp.Data.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<List<Address>> GetAddressesAsync()
+        public async Task<Checkout> AddNewCheckoutAsync(int orderId)
         {
-            var userAddresses = await _context.Users_Addresses.Where(u => u.UserId == GetUserAsync().Id).Select(u => u.Address).ToListAsync();
+            var user = await GetUserAsync();
+            var userAddresses = await GetAddressesAsync(user.Id);
 
-            return userAddresses;
-        }
+            Checkout checkout = new Checkout()
+            {
+            UserAddresses = userAddresses,
+            Order = _context.Orders.FirstOrDefault(o => o.Id == orderId),
+            OrderId = orderId
+            };
 
-        public async Task<Checkout> AddNewCheckoutAsync(List<Address> userAddresses)
-        {
-            Checkout checkout = new Checkout();
-            checkout.UserAddresses = userAddresses;
-            
             await _context.Checkouts.AddAsync(checkout);
             await _context.SaveChangesAsync();
 
             return checkout;            
+        }
+
+        public async Task<List<Address>> GetAddressesAsync(int userId)
+        {
+            var userAddresses = await _context.Users_Addresses.Where(u => u.UserId == userId).Select(u => u.Address).ToListAsync();
+
+            return userAddresses;
         }
 
         public async Task<User> GetUserAsync()

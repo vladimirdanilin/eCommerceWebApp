@@ -13,18 +13,17 @@ namespace eCommerceWebApp.Controllers
             _checkoutService = checkoutService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int orderId)
         {
-            var userAddresses = await _checkoutService.GetAddressesAsync();
-            var checkout = await _checkoutService.AddNewCheckoutAsync(userAddresses);
+            var checkout = await _checkoutService.AddNewCheckoutAsync(orderId);
 
             return View(checkout);
         }
 
-        public async Task<IActionResult> AddCheckoutData()
+        /*public async Task<IActionResult> AddCheckoutData()
         {
 
-        }
+        }*/
 
 
     }

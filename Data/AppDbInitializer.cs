@@ -14,7 +14,7 @@ namespace eCommerceWebApp.Data
                 context.Database.EnsureCreated();
 
                 //Users
-                if (!context.Users.Any())
+                /*if (!context.Users.Any())
                 {
                     context.Users.AddRange(new List<User>()
                     {
@@ -52,7 +52,7 @@ namespace eCommerceWebApp.Data
                         }
                     });
                     context.SaveChanges();
-                }
+                }*/
                 
                 //Products
                 if (!context.Products.Any())
@@ -164,7 +164,7 @@ namespace eCommerceWebApp.Data
                 }
 
                 //Addresses
-                if (!context.Addresses.Any())
+                /*if (!context.Addresses.Any())
                 {
                     context.Addresses.AddRange(new List<Address>()
                     {
@@ -381,7 +381,7 @@ namespace eCommerceWebApp.Data
                         }
                     });
                     context.SaveChanges();
-                }
+                }*/
             }
         }
     }

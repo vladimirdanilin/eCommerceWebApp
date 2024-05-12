@@ -98,7 +98,9 @@ namespace eCommerceWebApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderId")
+                        .IsUnique()
+                        .HasFilter("[OrderId] IS NOT NULL");
 
                     b.ToTable("Checkouts");
                 });
@@ -279,8 +281,8 @@ namespace eCommerceWebApp.Migrations
             modelBuilder.Entity("eCommerceWebApp.Models.Checkout", b =>
                 {
                     b.HasOne("eCommerceWebApp.Models.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId");
+                        .WithOne("Checkout")
+                        .HasForeignKey("eCommerceWebApp.Models.Checkout", "OrderId");
 
                     b.Navigation("Order");
                 });
@@ -363,6 +365,8 @@ namespace eCommerceWebApp.Migrations
 
             modelBuilder.Entity("eCommerceWebApp.Models.Order", b =>
                 {
+                    b.Navigation("Checkout");
+
                     b.Navigation("Orders_Products");
                 });
 
