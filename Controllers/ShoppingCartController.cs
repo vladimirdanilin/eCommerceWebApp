@@ -52,9 +52,11 @@ namespace eCommerceWebApp.Controllers
             }
         }
 
-        public async Task ClearShoppingCart(int shoppingCartId)
+        public async Task<IActionResult> ClearShoppingCart(int shoppingCartId)
         { 
             await _shoppingCartService.ClearShoppingCartAsync(shoppingCartId);
+
+            return RedirectToAction("Index", "ShoppingCart");
         }
     }
 }

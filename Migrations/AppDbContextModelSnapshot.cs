@@ -96,6 +96,9 @@ namespace eCommerceWebApp.Migrations
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ShippingAddressId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId")

@@ -10,6 +10,8 @@ namespace eCommerceWebApp.Models
 
         public List<Address> UserAddresses { get; set; }
 
+        public int? ShippingAddressId { get; set; }
+
         public int? OrderId { get; set; }
 
         public Order? Order { get; set; }

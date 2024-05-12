@@ -48,5 +48,20 @@ namespace eCommerceWebApp.Data.Services
 
             return user;
         }
+
+        public async Task<Checkout> TempCheckout()
+        {
+            var checkout = await _context.Checkouts.Include(c => c.UserAddresses).Include(c => c.Order).OrderByDescending(c => c.Id).FirstOrDefaultAsync();
+
+            return checkout;
+        }
+
+        public async Task UpdateOrder(Checkout checkout)
+        {
+            var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == checkout.OrderId);
+            order.ShippingAddressId = checkout.ShippingAddressId;
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

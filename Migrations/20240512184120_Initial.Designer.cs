@@ -12,7 +12,7 @@ using eCommerceWebApp.Data;
 namespace eCommerceWebApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240508090934_Initial")]
+    [Migration("20240512184120_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -97,6 +97,9 @@ namespace eCommerceWebApp.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ShippingAddressId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
