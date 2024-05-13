@@ -10,8 +10,6 @@ namespace eCommerceWebApp.Data.Services
 
         Task<User> GetUserAsync();
 
-        Task<Checkout> TempCheckout();
-
         Task UpdateOrder(Checkout checkout);
     }
 }

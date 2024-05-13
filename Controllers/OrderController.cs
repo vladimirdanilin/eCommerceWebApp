@@ -10,16 +10,20 @@ namespace eCommerceWebApp.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderService _orderService;
+        private readonly IShoppingCartService _shoppingCartService;
 
-        public OrderController(IOrderService orderService)
+        public OrderController(IOrderService orderService, IShoppingCartService shoppingCartService)
         {
             _orderService = orderService;
+            _shoppingCartService = shoppingCartService;
         }
 
         public async Task<IActionResult> PlaceOrder(int shoppingCartId)
         {
             var placedOrderId = await _orderService.PlaceOrderAndGetIdAsync(shoppingCartId);
-            //RedirectToAction("ClearShoppingCart", "ShoppingCart", new {CartId = shoppingCartId});
+
+            await _shoppingCartService.ClearShoppingCartAsync(shoppingCartId);
+
             return RedirectToAction("Index", "Checkout", new {orderId = placedOrderId});
         }
     }

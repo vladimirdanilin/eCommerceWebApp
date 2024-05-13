@@ -20,12 +20,6 @@ namespace eCommerceWebApp.Controllers
             return View(checkout);
         }
 
-        /*public async Task<IActionResult> AddCheckoutData()
-        {
-            var checkout = await _checkoutService.TempCheckout();
-            return View("Index", checkout);
-        }*/
-
         [HttpPost]
         public async Task<IActionResult> SaveCheckoutData(Checkout checkout)
         {
