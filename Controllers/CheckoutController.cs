@@ -25,7 +25,7 @@ namespace eCommerceWebApp.Controllers
         {
             await _checkoutService.UpdateOrder(checkout);
 
-            return RedirectToAction("Index", "ShoppingCart");
+            return View("CheckoutConfirmation");
         }
 
 
