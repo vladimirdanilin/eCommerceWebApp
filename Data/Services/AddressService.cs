@@ -31,8 +31,16 @@ namespace eCommerceWebApp.Data.Services
 
         public async Task DeleteAddressAsync(int addressId)
         {
+            int userId = await GetCurrentUserIdAsync();
             var address = await _context.Addresses.FirstOrDefaultAsync(a => a.Id == addressId);
-            _context.Addresses.Remove(address);
+
+            foreach (var user_address in _context.Users_Addresses)
+            {
+                if ((user_address.AddressId == addressId) && (user_address.UserId == userId))
+                { 
+                    _context.Users_Addresses.Remove(user_address);
+                }
+            }
             await _context.SaveChangesAsync();
         }
 
