@@ -20,9 +20,10 @@ namespace eCommerceWebApp.Data.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Order>> GetOrdersByUserIdAsync(int userId)
+        public async Task<IEnumerable<Order>> GetOrdersByUserIdAsync()
         {
-            throw new NotImplementedException();
+            int userId = await GetCurrentUserIdAsync();
+            return await _context.Orders.Where(o => o.UserId == userId).Include(o => o.ShippingAddress).ToListAsync();
         }
 
         public async Task<int> PlaceOrderAndGetIdAsync(int shoppingCartId)
@@ -58,14 +59,23 @@ namespace eCommerceWebApp.Data.Services
             return order.Id;
         }
 
-        public Task<Order> CancelOrder()
+        public Task<Order> CancelOrderAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<Order> UpdateOrder()
+        public Task<Order> UpdateOrderAsync()
         {
             throw new NotImplementedException();
         }
+
+        public async Task<int> GetCurrentUserIdAsync()
+        {
+            var username = _httpContextAccessor.HttpContext.User.Identity.Name;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == username);
+
+            return user.Id;
+        }
+
     }
 }

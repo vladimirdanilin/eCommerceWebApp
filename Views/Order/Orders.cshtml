@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Order>
+
+<h2>Orders</h2>
+
+@if (Model != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date of The Order</th>
+                <th>Shipping Address</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.OrderDate</td>
+                    <td>@item.ShippingAddress.PostalOrZipCode</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>You don't have any orders</p>
+}

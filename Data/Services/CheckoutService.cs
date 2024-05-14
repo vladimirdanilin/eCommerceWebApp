@@ -53,6 +53,7 @@ namespace eCommerceWebApp.Data.Services
         {
             var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == checkout.OrderId);
             order.ShippingAddressId = checkout.ShippingAddressId;
+            order.ShippingAddress = await _context.Addresses.FirstOrDefaultAsync(a => a.Id == checkout.ShippingAddressId);
 
             await _context.SaveChangesAsync();
         }

@@ -26,5 +26,11 @@ namespace eCommerceWebApp.Controllers
 
             return RedirectToAction("Index", "Checkout", new {orderId = placedOrderId});
         }
+
+        public async Task<IActionResult> DisplayOrders()
+        { 
+            var orders = await _orderService.GetOrdersByUserIdAsync();
+            return View("Orders", orders);
+        }
     }
 }
