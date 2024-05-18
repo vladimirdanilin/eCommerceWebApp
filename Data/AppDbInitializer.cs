@@ -1,5 +1,6 @@
 ﻿using eCommerceWebApp.Data.Enums;
 using eCommerceWebApp.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace eCommerceWebApp.Data
 {
@@ -12,6 +13,28 @@ namespace eCommerceWebApp.Data
                 var context = serviceScope.ServiceProvider.GetService<AppDbContext>();
 
                 context.Database.EnsureCreated();
+
+                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                if (!roleManager.Roles.Any())
+                { 
+                    roleManager.CreateAsync(new IdentityRole("User")).Wait();
+                    roleManager.CreateAsync(new IdentityRole("Staff")).Wait();
+                }
+
+                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<User>>();
+
+                if (!userManager.Users.Any())
+                {
+                    var adminUser = new User
+                    {
+                        UserName = "admin@domain.com",
+                        Email = "admin@domain.com",
+                        FullName = "Admin User"
+                    };
+
+                    userManager.CreateAsync(adminUser, "Admin007!").Wait();
+                    userManager.AddToRoleAsync(adminUser, "Staff").Wait();
+                }
 
                 //Users
                 /*if (!context.Users.Any())
