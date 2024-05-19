@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace eCommerceWebApp.Models
 {
-    public class User : IdentityUser<int>
+    public class User
     {
         [Key]
         public int Id { get; set; }

@@ -14,27 +14,6 @@ namespace eCommerceWebApp.Data
 
                 context.Database.EnsureCreated();
 
-                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
-                if (!roleManager.Roles.Any())
-                { 
-                    roleManager.CreateAsync(new IdentityRole<int> {Name = "User" }).Wait();
-                    roleManager.CreateAsync(new IdentityRole<int> {Name = "Staff" }).Wait();
-                }
-
-                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<User>>();
-
-                if (1 ==1 )
-                {
-                    var adminUser = new User
-                    {
-                        Email = "admin@domain.com",
-                        FullName = "Admin User"
-                    };
-
-                    userManager.CreateAsync(adminUser, "Admin007!").Wait();
-                    userManager.AddToRoleAsync(adminUser, "Staff").Wait();
-                }
-
                 //Users
                 /*if (!context.Users.Any())
                 {
