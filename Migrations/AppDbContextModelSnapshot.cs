@@ -22,6 +22,15 @@ namespace eCommerceWebApp.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("eCommerceWebApp.Data.Role", b =>
+                {
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("Role");
+                });
+
             modelBuilder.Entity("eCommerceWebApp.Models.Address", b =>
                 {
                     b.Property<int>("Id")

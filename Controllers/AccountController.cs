@@ -12,9 +12,14 @@ namespace eCommerceWebApp.Controllers
     {
         private readonly AppDbContext _context;
 
-        public AccountController(AppDbContext context)
+        private readonly Role _adminRole;
+        private readonly Role _userRole;
+
+        public AccountController(AppDbContext context, Role adminRole, Role userRole)
         {
             _context = context;
+            _adminRole = adminRole;
+            _userRole = userRole;
         }
 
         [HttpGet]
@@ -57,7 +62,7 @@ namespace eCommerceWebApp.Controllers
                 User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
                 if (user == null)
                 {
-                    _context.Users.Add(new User { FullName = model.FullName, Email = model.Email, Password = model.Password });
+                    _context.Users.Add(new User { FullName = model.FullName, Email = model.Email, Password = model.Password, Role = _userRole });
                     await _context.SaveChangesAsync();
 
                     await Authenticate(model.Email);
@@ -85,8 +90,13 @@ namespace eCommerceWebApp.Controllers
 
         public async Task<IActionResult> Logout()
         { 
-        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
 
     }

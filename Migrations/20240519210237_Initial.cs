@@ -31,6 +31,16 @@ namespace eCommerceWebApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Role",
+                columns: table => new
+                {
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -273,6 +283,9 @@ namespace eCommerceWebApp.Migrations
 
             migrationBuilder.DropTable(
                 name: "Orders_Products");
+
+            migrationBuilder.DropTable(
+                name: "Role");
 
             migrationBuilder.DropTable(
                 name: "Users_Addresses");

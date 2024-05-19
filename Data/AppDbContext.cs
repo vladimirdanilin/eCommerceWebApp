@@ -27,6 +27,8 @@ namespace eCommerceWebApp.Data
                 au.AddressId
             });
 
+            modelBuilder.Entity<Role>().HasNoKey();
+
             modelBuilder.Entity<Order_Product>().HasOne(o => o.Order).WithMany(am => am.Orders_Products).HasForeignKey(o => o.OrderId);
             modelBuilder.Entity<Order_Product>().HasOne(p => p.Product).WithMany(am => am.Orders_Products).HasForeignKey(p => p.ProductId);
 

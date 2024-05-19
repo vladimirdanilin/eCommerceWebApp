@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using eCommerceWebApp.Data;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,6 +17,9 @@ namespace eCommerceWebApp.Models
         public string Email { get; set; }
 
         public string Password { get; set; }
+
+        [NotMapped]
+        public Role Role { get; set; }
 
         //public List<Address> ShippingAddresses { get; set; }
 

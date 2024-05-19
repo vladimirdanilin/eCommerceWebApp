@@ -20,12 +20,25 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ICheckoutService, CheckoutService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+//Define roles as services
+builder.Services.AddSingleton(new Role("admin"));
+builder.Services.AddSingleton(new Role("user"));
+
 //Connection Configuration
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options => //CookieAuthenticationOptions
     {
         options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+        options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Account/AccessDenied");
     });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("admin"));
+    options.AddPolicy("RequireUserRole", policy => policy.RequireRole("user"));
+});
+
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

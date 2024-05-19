@@ -2,6 +2,7 @@
 using eCommerceWebApp.Data.Enums;
 using eCommerceWebApp.Data.Services;
 using eCommerceWebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +29,7 @@ namespace eCommerceWebApp.Controllers
         }
 
         //Get: Product/AddProduct
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> AddProduct()
         {
         return View();

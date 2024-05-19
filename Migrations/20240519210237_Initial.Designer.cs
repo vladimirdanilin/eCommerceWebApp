@@ -12,7 +12,7 @@ using eCommerceWebApp.Data;
 namespace eCommerceWebApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240519194203_Initial")]
+    [Migration("20240519210237_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -24,6 +24,15 @@ namespace eCommerceWebApp.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("eCommerceWebApp.Data.Role", b =>
+                {
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("Role");
+                });
 
             modelBuilder.Entity("eCommerceWebApp.Models.Address", b =>
                 {
