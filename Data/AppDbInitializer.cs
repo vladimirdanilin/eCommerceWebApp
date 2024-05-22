@@ -14,6 +14,21 @@ namespace eCommerceWebApp.Data
 
                 context.Database.EnsureCreated();
 
+                //Staff and users
+                if (!context.Users.Any())
+                {
+                    context.Users.AddRange(new List<User>()
+                    {
+                        new User()
+                        {
+                            FullName = "Super Admin",
+                            Email = "superadmin@gmail.com",
+                            Password = "Vladimir09",
+                            //Role = _superAdminRole
+                        }
+                    }) ;
+                }
+
                 //Users
                 /*if (!context.Users.Any())
                 {

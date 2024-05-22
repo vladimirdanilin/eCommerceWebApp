@@ -21,8 +21,10 @@ builder.Services.AddScoped<ICheckoutService, CheckoutService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 //Define roles as services
+builder.Services.AddSingleton(new Role("superAdmin"));
 builder.Services.AddSingleton(new Role("admin"));
 builder.Services.AddSingleton(new Role("user"));
+builder.Services.AddSingleton(new Role("guest"));
 
 //Connection Configuration
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -34,8 +36,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.AddAuthorization(options =>
 {
+    options.AddPolicy("RequireSuperAdminRole", policy => policy.RequireRole("superAdmin"));
     options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("admin"));
     options.AddPolicy("RequireUserRole", policy => policy.RequireRole("user"));
+    options.AddPolicy("RequireGuestRole", policy => policy.RequireRole("guest"));
 });
 
 
