@@ -1,6 +1,6 @@
-﻿namespace eCommerceWebApp.Models
+﻿namespace ECommerceWebApp.Models
 {
-    public class User_Address
+    public class UserAddress
     {
         public int UserId { get; set; }
         public User User { get; set; }

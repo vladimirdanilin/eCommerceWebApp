@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace eCommerceWebApp.Models
+namespace ECommerceWebApp.Models
 {
     public class Order
     {
@@ -12,7 +12,7 @@ namespace eCommerceWebApp.Models
 
         //Relationships
 
-        public List<Order_Product> Orders_Products { get; set; }
+        public List<OrderProduct> OrdersProducts { get; set; }
 
         //User
 
@@ -27,11 +27,5 @@ namespace eCommerceWebApp.Models
         [ForeignKey("ShippingAddressId")]
 
         public Address? ShippingAddress { get; set; }
-
-        //Checkout
-        public Checkout? Checkout { get; set; } 
-
-
-
     }
 }

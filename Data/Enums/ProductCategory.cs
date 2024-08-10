@@ -1,4 +1,4 @@
-﻿namespace eCommerceWebApp.Data.Enums
+﻿namespace ECommerceWebApp.Data.Enums
 {
     public enum ProductCategory
     {

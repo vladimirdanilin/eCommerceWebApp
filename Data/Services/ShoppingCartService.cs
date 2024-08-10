@@ -1,23 +1,31 @@
-﻿using eCommerceWebApp.Models;
+﻿using ECommerceWebApp.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
-namespace eCommerceWebApp.Data.Services
+namespace ECommerceWebApp.Data.Services
 {
     public class ShoppingCartService : IShoppingCartService
     {
         private readonly AppDbContext _context;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ShoppingCartService(AppDbContext context , IHttpContextAccessor httpContextAccessor)
+        public ShoppingCartService(AppDbContext context)
         {
             _context = context;
-            _httpContextAccessor = httpContextAccessor;
+        }
+
+        public async Task<ShoppingCart> GetCartByUserIdAsync(int userId)
+        {
+            var cart = await _context.ShoppingCarts
+                .Include(c => c.CartItems)
+                .ThenInclude(p => p.Product)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
+            return cart;
         }
 
         public async Task AddItemToCartAsync(int userId, int productId, int quantity)
         {
-            var cart = await _context.ShoppingCarts.Include(c => c.CartItems).FirstOrDefaultAsync(c => c.UserId == userId);
+            var cart = await _context.ShoppingCarts.FirstOrDefaultAsync(c => c.UserId == userId);
+            Product product =  await _context.Products.FirstOrDefaultAsync(p => p.Id == productId);
 
             //If the cart does not exist, create a new one
             if (cart == null)
@@ -26,9 +34,13 @@ namespace eCommerceWebApp.Data.Services
                 {
                     UserId = userId
                 });
+
                 await _context.SaveChangesAsync();
-                cart = await _context.ShoppingCarts.Include(c => c.CartItems).FirstOrDefaultAsync(c => c.UserId == userId);
             }
+
+            cart = await _context.ShoppingCarts
+                .Include(c => c.CartItems)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
 
             //Checking whether the item is in the cart
             var cartItem = cart.CartItems.FirstOrDefault(item => item.ProductId == productId);
@@ -36,67 +48,50 @@ namespace eCommerceWebApp.Data.Services
             if (cartItem != null)
             {
                 cartItem.Quantity += quantity;
+                cartItem.TotalUnitPrice = Math.Round(cartItem.Quantity * product.Price, 2);
+                _context.CartItems.Update(cartItem);
             }
             else
             {
-                Product product = _context.Products.FirstOrDefault(p => p.Id == productId);
-                cart.CartItems.Add(new CartItem()
+                if (product != null)
                 {
-                    ProductId = productId,
-                    Product = product,
-                    Quantity = quantity,
-                    TotalUnitPrice = Math.Round(quantity * product.Price, 2)
-                });
+                    cart.CartItems.Add(new CartItem()
+                    {
+                        ProductId = productId,
+                        Product = product,
+                        Quantity = quantity,
+                        TotalUnitPrice = Math.Round(quantity * product.Price, 2)
+                    });
+                }
             }
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task ClearShoppingCartAsync(int shoppingCartId)
+        public async Task ClearShoppingCartAsync(int userId)
         {
-            var shoppingCartToRemove = await _context.ShoppingCarts.FirstOrDefaultAsync(s => s.Id == shoppingCartId);
+            var shoppingCartToRemove = await _context.ShoppingCarts.FirstOrDefaultAsync(sc => sc.UserId == userId);
             _context.ShoppingCarts.Remove(shoppingCartToRemove);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<ShoppingCart> GetCartAsync(int userId)
+        public async Task RemoveItemFromCartAsync(int userId, int productId)
         {
-            var cart = await _context.ShoppingCarts.Include(c => c.CartItems).ThenInclude(p => p.Product).FirstOrDefaultAsync(c => c.UserId == userId);
-            if (cart != null)
+            var cart = await GetCartByUserIdAsync(userId);
+            var cartItem = cart.CartItems.FirstOrDefault(item => item.ProductId == productId);
+
+            if (cartItem.Quantity > 0)
             {
-                cart.TotalPrice = 0;
-                foreach (var item in cart.CartItems)
-                {
-                    cart.TotalPrice += item.Product.Price * item.Quantity;
-                }
-                cart.TotalPrice = Math.Round(cart.TotalPrice, 2);
-                await _context.SaveChangesAsync();
+                cartItem.Quantity --;
+                cartItem.TotalUnitPrice = Math.Round(cartItem.Quantity * cartItem.Product.Price, 2);
+                _context.CartItems.Update(cartItem);
             }
-            return cart;
-        }
-
-        public async Task<int> GetCurrentUserIdAsync()
-        {
-            var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
-
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == userName);
-
-            return user.Id;
-        }
-
-        public async Task RemoveItemFromCartAsync(int userId, int productId, int quantity)
-        {
-            var cart = await _context.ShoppingCarts.Include(c => c.CartItems).FirstOrDefaultAsync(c => c.UserId == userId);
-            var item = cart.CartItems.FirstOrDefault(item => item.ProductId == productId);
-
-            if (cart.CartItems.Contains(item) && item.Quantity > 0)
-            {
-                item.Quantity -= 1;
-            }
-            if (cart.CartItems.Contains(item) && item.Quantity == 0)
+            if (cartItem.Quantity == 0)
             { 
-                cart.CartItems.Remove(item);
+                cart.CartItems.Remove(cartItem);
+                _context.CartItems.Remove(cartItem);
             }
+
             await _context.SaveChangesAsync();
         }
     }

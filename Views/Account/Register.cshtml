@@ -6,9 +6,14 @@
     <div class="validation" asp-validation-summary="ModelOnly"></div>
     <div>
         <div>
-            <label asp-for="FullName">Enter Full Name</label><br />
-            <input type="text" asp-for="FullName" />
-            <span asp-validation-for="FullName"></span>
+            <label asp-for="FirstName">Enter First Name</label><br />
+            <input type="text" asp-for="FirstName" />
+            <span asp-validation-for="FirstName"></span>
+        </div>
+        <div>
+            <label asp-for="LastName">Enter Last Name</label><br />
+            <input type="text" asp-for="LastName" />
+            <span asp-validation-for="LastName"></span>
         </div>
         <div>
             <label asp-for="Email">Enter Email</label><br />

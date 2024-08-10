@@ -1,19 +1,11 @@
-﻿using eCommerceWebApp.Models;
+﻿using ECommerceWebApp.Models;
 
-namespace eCommerceWebApp.Data.Services
+namespace ECommerceWebApp.Data.Services
 {
     public interface IOrderService
     {
-        Task<IEnumerable<Order>> GetOrdersByUserIdAsync();
+        Task<IEnumerable<Order>> GetOrdersByUserIdAsync(int userId);
 
-        Task<Order> GetOrderByIdAsync();
-
-        Task<int> PlaceOrderAndGetIdAsync(int shoppingCartId);
-
-        Task<Order> CancelOrderAsync();
-
-        Task<Order> UpdateOrderAsync();
-
-        Task<int> GetCurrentUserIdAsync();
+        Task<int> PlaceOrderAndGetIdAsync(int userId, int selectedAddressId);
     }
 }

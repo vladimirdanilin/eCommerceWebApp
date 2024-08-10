@@ -1,35 +1,59 @@
-﻿using eCommerceWebApp.Data;
-using eCommerceWebApp.Data.Services;
-using eCommerceWebApp.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using ECommerceWebApp.Data;
+using ECommerceWebApp.Data.Services;
+using ECommerceWebApp.Models;
+using ECommerceWebApp.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace eCommerceWebApp.Controllers
+namespace ECommerceWebApp.Controllers
 {
     public class OrderController : Controller
     {
+        private readonly AppDbContext _context;
         private readonly IOrderService _orderService;
         private readonly IShoppingCartService _shoppingCartService;
+        private readonly UserManager<User> _userManager;
 
-        public OrderController(IOrderService orderService, IShoppingCartService shoppingCartService)
+        public OrderController(AppDbContext context ,IOrderService orderService, IShoppingCartService shoppingCartService, UserManager<User> userManager)
         {
+            _context = context;
             _orderService = orderService;
             _shoppingCartService = shoppingCartService;
+            _userManager = userManager;
         }
 
-        public async Task<IActionResult> PlaceOrder(int shoppingCartId)
+        public async Task<IActionResult> PlaceOrder()
         {
-            var placedOrderId = await _orderService.PlaceOrderAndGetIdAsync(shoppingCartId);
+            var user = await _userManager.GetUserAsync(User);
 
-            await _shoppingCartService.ClearShoppingCartAsync(shoppingCartId);
+            var orderViewModel = new OrderViewModel
+            {
+                UserAddresses = await _context.UsersAddresses
+                    .Where(ua => ua.UserId == user.Id)
+                    .Select(ua => ua.Address)
+                    .ToListAsync()
+            };
 
-            return RedirectToAction("Index", "Checkout", new {orderId = placedOrderId});
+            return View(orderViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PlaceOrder(OrderViewModel orderViewModel)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var placedOrderId = await _orderService.PlaceOrderAndGetIdAsync(user.Id, orderViewModel.ShippingAddressId);
+
+            await _shoppingCartService.ClearShoppingCartAsync(user.Id);
+            ViewBag.OrderId = placedOrderId;
+
+            return View("OrderPlacementConfirmation");
         }
 
         public async Task<IActionResult> DisplayOrders()
-        { 
-            var orders = await _orderService.GetOrdersByUserIdAsync();
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            var orders = await _orderService.GetOrdersByUserIdAsync(currentUser.Id);
             return View("Orders", orders);
         }
     }

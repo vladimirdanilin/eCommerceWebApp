@@ -1,6 +1,6 @@
-﻿using eCommerceWebApp.Models;
+﻿using ECommerceWebApp.Models;
 
-namespace eCommerceWebApp.Data.Services
+namespace ECommerceWebApp.Data.Services
 {
     public interface IProductService
     {
@@ -12,7 +12,9 @@ namespace eCommerceWebApp.Data.Services
 
         Task EditProductAsync(Product editedProduct);
 
-        List<Product> SearchForProduct(string searchString);
+        Task <IEnumerable<Product>> SearchForProductAsync(string searchString);
+
+        Task AddRatingAsync(int productId, int userId, int numberOfStars);
 
         void DeleteProductAsync(int id);
     }

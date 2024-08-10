@@ -1,7 +1,7 @@
-﻿using eCommerceWebApp.Models;
+﻿using ECommerceWebApp.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace eCommerceWebApp.Data.Services
+namespace ECommerceWebApp.Data.Services
 {
     public class ProductService : IProductService
     {
@@ -35,16 +35,16 @@ namespace eCommerceWebApp.Data.Services
             return result;
         }
 
-        public List<Product> SearchForProduct(string searchString)
+        public async Task<IEnumerable<Product>> SearchForProductAsync(string searchString)
         {
-            List<Product> searchedProducts = new List<Product>();
+            if (string.IsNullOrWhiteSpace(searchString))
+            {
+                return Enumerable.Empty<Product>();
+            }
 
-            if (searchString == null)
-                return searchedProducts;
-
-            return _context.Products
+            return await _context.Products
                 .Where(p => p.Name.ToLower().Contains(searchString.ToLower()))
-                .ToList();
+                .ToListAsync();
         }
 
         public async Task EditProductAsync(Product editedProduct)
@@ -70,6 +70,34 @@ namespace eCommerceWebApp.Data.Services
             catch (DbUpdateConcurrencyException)
             {
                 throw;
+            }
+        }
+
+        public async Task AddRatingAsync(int productId, int userId, int numberOfStars)
+        {
+            var existingRating = await _context.Ratings.FirstOrDefaultAsync(r => r.ProductId == productId && r.UserId == userId);
+
+            if (existingRating == null)
+            {
+                var rating = new Rating
+                {
+                    ProductId = productId,
+                    UserId = userId,
+                    NumberOfStars = numberOfStars
+                };
+
+                _context.Ratings.Add(rating);
+
+                var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == productId);
+
+                if (product != null)
+                {
+                    product.TotalNumberOfStars += numberOfStars;
+                    product.TotalNumberOfRates++;
+                    _context.Products.Update(product);
+                }
+
+                await _context.SaveChangesAsync();
             }
         }
     }

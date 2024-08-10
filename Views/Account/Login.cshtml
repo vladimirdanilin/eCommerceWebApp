@@ -2,8 +2,9 @@
 
 <h2>Logging in</h2>
 
-<form asp-action="Login" asp-controller="Account" asp-anti-forgery="true">
-    <div class="validation" asp-validation-summary="ModelOnly"></div>
+<form method="post" asp-action="Login" asp-controller="Account" asp-anti-forgery="true"
+      asp-route-returnUrl="@Model.ReturnURL">
+    <div asp-validation-summary="ModelOnly"></div>
     <div>
         <div>
             <label asp-for="Email">Enter Email</label><br />

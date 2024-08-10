@@ -1,39 +1,50 @@
-﻿using eCommerceWebApp.Models;
+﻿using ECommerceWebApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace eCommerceWebApp.Data
+namespace ECommerceWebApp.Data
 {
-    public class AppDbContext: DbContext
+    public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
             
         }
 
-        //For many to many
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Order_Product>().HasKey(op => new
+            modelBuilder.Entity<OrderProduct>().HasKey(op => new
             { 
                 op.OrderId, 
                 op.ProductId
             });
 
-            modelBuilder.Entity<User_Address>().HasKey(au => new
+            modelBuilder.Entity<UserAddress>().HasKey(au => new
             {
                 au.UserId,
                 au.AddressId
             });
 
-            modelBuilder.Entity<Role>().HasNoKey();
+            modelBuilder.Entity<OrderProduct>()
+                .HasOne(o => o.Order)
+                .WithMany(am => am.OrdersProducts)
+                .HasForeignKey(o => o.OrderId);
 
-            modelBuilder.Entity<Order_Product>().HasOne(o => o.Order).WithMany(am => am.Orders_Products).HasForeignKey(o => o.OrderId);
-            modelBuilder.Entity<Order_Product>().HasOne(p => p.Product).WithMany(am => am.Orders_Products).HasForeignKey(p => p.ProductId);
+            modelBuilder.Entity<OrderProduct>()
+                .HasOne(p => p.Product)
+                .WithMany(am => am.OrdersProducts)
+                .HasForeignKey(p => p.ProductId);
 
-            modelBuilder.Entity<User_Address>().HasOne(u => u.User).WithMany(am => am.Users_Addresses).HasForeignKey(u => u.UserId);
-            modelBuilder.Entity<User_Address>().HasOne(a => a.Address).WithMany(am => am.Users_Addresses).HasForeignKey(a => a.AddressId);
+            modelBuilder.Entity<UserAddress>()
+                .HasOne(u => u.User)
+                .WithMany(am => am.UsersAddresses)
+                .HasForeignKey(u => u.UserId);
+
+            modelBuilder.Entity<UserAddress>()
+                .HasOne(a => a.Address)
+                .WithMany(am => am.UsersAddresses)
+                .HasForeignKey(a => a.AddressId);
 
             base.OnModelCreating(modelBuilder);
         }
@@ -45,9 +56,9 @@ namespace eCommerceWebApp.Data
 
         public DbSet<User> Users { get; set; }
 
-        public DbSet<Order_Product> Orders_Products { get; set; }
+        public DbSet<OrderProduct> OrdersProducts { get; set; }
 
-        public DbSet<User_Address> Users_Addresses { get; set; }
+        public DbSet<UserAddress> UsersAddresses { get; set; }
 
         public DbSet<Address> Addresses { get; set; }
 
@@ -55,6 +66,6 @@ namespace eCommerceWebApp.Data
 
         public DbSet<CartItem> CartItems { get; set; }
 
-        public DbSet<Checkout> Checkouts { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
     }
 }

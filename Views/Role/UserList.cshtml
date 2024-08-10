@@ -1,0 +1,27 @@
+﻿@model IEnumerable<ECommerceWebApp.ViewModels.UserViewModel>
+
+<h2>List of users</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Full Name</th>
+            <th>Role</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var userWithRole in Model)
+        {
+            <tr>
+                <td>@userWithRole.Email</td>
+                <td>@userWithRole.FirstName @userWithRole.LastName</td>
+                <td>@userWithRole.RoleName</td>
+                <td>
+                    <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-userid="@userWithRole.Id">Edit acess rights</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

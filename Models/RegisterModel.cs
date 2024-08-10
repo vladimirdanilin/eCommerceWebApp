@@ -1,21 +1,21 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace eCommerceWebApp.Models
+namespace ECommerceWebApp.Models
 {
     public class RegisterModel
     {
-        [Required(ErrorMessage = "Full name is not specified")]
-        public string FullName { get; set; }
+        public string FirstName { get; set; }
 
-        [Required(ErrorMessage = "Email is not specified")]
+        public string LastName { get; set; }
+
+        [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Password is not specified")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Password is incorrect")]
+        [Compare("Password", ErrorMessage = "The passwords do not match")]
         public string ConfirmPassword { get; set; }
     }
 }

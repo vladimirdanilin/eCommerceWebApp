@@ -1,14 +1,13 @@
-﻿@model IEnumerable<Address>
+﻿@model List<ECommerceWebApp.ViewModels.AddressViewModel>
 
 <h2>Addresses</h2>
 
-@if (Model != null)
+@if (Model != null && Model.Any())
 {
     <table class="table">
         <thead>
             <tr>
-                <th>Postal or zip code</th>
-                <th>Country and city</th>
+                <th>City</th>
                 <th>Street</th>
             </tr>
         </thead>
@@ -17,8 +16,7 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.PostalOrZipCode</td>
-                    <td>@item.Country, @item.City</td>
+                    <td>@item.City</td>
                     <td>@item.Street</td>
                     <td>
                         <div class="text-center">

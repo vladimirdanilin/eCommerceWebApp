@@ -1,6 +1,6 @@
-﻿namespace eCommerceWebApp.Models
+﻿namespace ECommerceWebApp.Models
 {
-    public class Order_Product
+    public class OrderProduct
     {
         public int OrderId { get; set; }
         public Order Order { get; set; }

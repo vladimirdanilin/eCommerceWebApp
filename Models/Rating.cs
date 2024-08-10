@@ -4,23 +4,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ECommerceWebApp.Models
 {
-    public class CartItem
+    public class Rating
     {
         [Key]
         public int Id { get; set; }
 
+        [Range(1,5)]
+        public int NumberOfStars { get; set; }
+
         public int ProductId { get; set; }
+        [ForeignKey("ProductId")]
 
         public Product Product { get; set; }
 
-        public int Quantity { get; set; }
+        public int UserId { get; set; }
+        [ForeignKey("UserId")]
 
-        public double TotalUnitPrice { get; set; }
-
-        //Relationships
-        public int ShoppingCartId { get; set; }
-        [ForeignKey("ShoppingCartId")]
-
-        public ShoppingCart ShoppingCart { get; set; }
+        public User User { get; set; }
     }
 }

@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
-namespace eCommerceWebApp.Models
+namespace ECommerceWebApp.Models
 {
     public class LoginModel
     {
@@ -10,5 +11,8 @@ namespace eCommerceWebApp.Models
         [Required(ErrorMessage = "Password is not specified")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        [ValidateNever]
+        public string? ReturnURL { get; set; }
     }
 }

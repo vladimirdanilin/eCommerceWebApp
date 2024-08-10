@@ -1,20 +1,14 @@
-﻿using eCommerceWebApp.Models;
+﻿using ECommerceWebApp.Models;
+using ECommerceWebApp.ViewModels;
 
-namespace eCommerceWebApp.Data.Services
+namespace ECommerceWebApp.Data.Services
 {
     public interface IAddressService
     {
-        Task<Address> GetAddressByIdAsync(int addressId);
-
         Task<List<Address>> GetUserAddressesByUserIdAsync(int userId);
 
-        Task AddAddressAsync(Address address);
+        Task AddAddressAsync(AddressViewModel addressViewModel, int userId);
 
-        Task<Address> EditAddressAsync(Address address);
-
-        Task DeleteAddressAsync(int addressId);
-
-        Task<int> GetCurrentUserIdAsync();
-
+        Task DeleteAddressAsync(int addressId, int userId);
     }
 }

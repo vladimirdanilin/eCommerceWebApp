@@ -1,27 +1,12 @@
-﻿using eCommerceWebApp.Data;
-using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Identity;
 
-namespace eCommerceWebApp.Models
+namespace ECommerceWebApp.Models
 {
-    public class User
+    public class User : IdentityUser<int>
     {
-        [Key]
-        public int Id { get; set; }
+        public string FirstName { get; set; }
 
-        public string FullName { get; set; }
-        
-        public string? PhoneNumber { get; set; }
-
-        public string Email { get; set; }
-
-        public string Password { get; set; }
-
-        [NotMapped]
-        public Role Role { get; set; }
-
-        //public List<Address> ShippingAddresses { get; set; }
+        public string LastName { get; set; }
 
         public ShoppingCart? ShoppingCart { get; set; }
 
@@ -31,6 +16,6 @@ namespace eCommerceWebApp.Models
 
         //Relationships
 
-        public List<User_Address>? Users_Addresses { get; set; }
+        public List<UserAddress>? UsersAddresses { get; set; }
     }
 }

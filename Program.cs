@@ -1,6 +1,6 @@
-using eCommerceWebApp.Data;
-using eCommerceWebApp.Data.Services;
-using eCommerceWebApp.Models;
+using ECommerceWebApp.Data;
+using ECommerceWebApp.Data.Services;
+using ECommerceWebApp.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -10,23 +10,30 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionString");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
-
-
 //Services Configuration
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<ICheckoutService, CheckoutService>();
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-//Define roles as services
-builder.Services.AddSingleton(new Role("superAdmin"));
-builder.Services.AddSingleton(new Role("admin"));
-builder.Services.AddSingleton(new Role("user"));
-builder.Services.AddSingleton(new Role("guest"));
+//Adding DbSeedingService
+builder.Services.AddHostedService<DatabaseSeedService>();
+
+//Adding Identity Services
+builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 6;
+    //options.User.RequireUniqueEmail = true;
+})
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
 
 //Connection Configuration
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options => //CookieAuthenticationOptions
     {
@@ -34,15 +41,14 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Account/AccessDenied");
     });
 
+//Add policies
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("RequireSuperAdminRole", policy => policy.RequireRole("superAdmin"));
-    options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("admin"));
-    options.AddPolicy("RequireUserRole", policy => policy.RequireRole("user"));
-    options.AddPolicy("RequireGuestRole", policy => policy.RequireRole("guest"));
+    options.AddPolicy("RequireSuperAdminRole", policy => policy.RequireRole("SuperAdmin"));
+    options.AddPolicy("RequireSalesManagerRole", policy => policy.RequireRole("SalesManager"));
+    options.AddPolicy("RequireWarehouseManagerRole", policy => policy.RequireRole("WarehouseManager"));
+    options.AddPolicy("RequireCustomerRole", policy => policy.RequireRole("Customer"));
 });
-
-
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -67,9 +73,12 @@ app.UseAuthorization();     // Authorization
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Product}/{action=Index}/{id?}");
 
-//Seed Database
-AppDbInitializer.Seed(app);
+app.MapControllerRoute(
+    name: "shoppingCart",
+    pattern: "{controller=ShoppingCart}/{action=AddItemToCart}");
 
 app.Run();
+
+

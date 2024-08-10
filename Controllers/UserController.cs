@@ -1,8 +1,8 @@
-﻿using eCommerceWebApp.Data;
+﻿using ECommerceWebApp.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace eCommerceWebApp.Controllers
+namespace ECommerceWebApp.Controllers
 {
     public class UserController : Controller
     {

@@ -1,43 +1,60 @@
-﻿using eCommerceWebApp.Data.Services;
-using eCommerceWebApp.Models;
+﻿using ECommerceWebApp.Data.Services;
+using ECommerceWebApp.Models;
+using ECommerceWebApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
-namespace eCommerceWebApp.Controllers
+namespace ECommerceWebApp.Controllers
 {
     public class ShoppingCartController : Controller
     {
         private readonly IShoppingCartService _shoppingCartService;
+        private readonly UserManager<User> _userManager;
 
-        public ShoppingCartController(IShoppingCartService shoppingCartService)
+        public ShoppingCartController(IShoppingCartService shoppingCartService, UserManager<User> userManager)
         {
             _shoppingCartService = shoppingCartService;
+            _userManager = userManager;
         }
 
-
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> Index()
         {
-            var cart = await _shoppingCartService.GetCartAsync(await _shoppingCartService.GetCurrentUserIdAsync());
+            var user = await _userManager.GetUserAsync(User);
+            var cart = await _shoppingCartService.GetCartByUserIdAsync(user.Id);
 
-            return View(cart);
-        }
-
-        [Authorize]
-        public async Task<IActionResult> AddItemToCart(int productId)
-        {
-            if (!ModelState.IsValid)
+            if (cart == null)
             {
                 return View();
             }
-            else
-            {
-                int userId = await _shoppingCartService.GetCurrentUserIdAsync();
-                await _shoppingCartService.AddItemToCartAsync(userId, productId, 1);
-                return RedirectToAction("Index", "ShoppingCart");
-            }
+
+            var shoppingCartViewModel = new ShoppingCartViewModel(cart.Id, cart.CartItems);
+
+            return View(shoppingCartViewModel);
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Customer")]
+        public async Task<IActionResult> AddItemToCart(int productId, int quantity)
+        {
+            if (productId <= 0 || quantity <= 0)
+            {
+                return BadRequest("Invalid productId or quantity");
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            await _shoppingCartService.AddItemToCartAsync(user.Id, productId, quantity);
+
+            return RedirectToAction("Index", "ShoppingCart");
+        }
+
+        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> RemoveItemFromCart(int productId)
         {
             if (!ModelState.IsValid)
@@ -46,8 +63,8 @@ namespace eCommerceWebApp.Controllers
             }
             else
             {
-                int userId = await _shoppingCartService.GetCurrentUserIdAsync();
-                await _shoppingCartService.RemoveItemFromCartAsync(userId, productId, 1);
+                var user = await _userManager.GetUserAsync(User);
+                await _shoppingCartService.RemoveItemFromCartAsync(user.Id, productId);
                 return RedirectToAction("Index", "ShoppingCart");
             }
         }

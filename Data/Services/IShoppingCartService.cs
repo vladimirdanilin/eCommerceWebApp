@@ -1,16 +1,14 @@
-﻿using eCommerceWebApp.Models;
+﻿using ECommerceWebApp.Models;
 
-namespace eCommerceWebApp.Data.Services
+namespace ECommerceWebApp.Data.Services
 {
     public interface IShoppingCartService
     {
-        Task<int> GetCurrentUserIdAsync();
-
-        Task<ShoppingCart> GetCartAsync(int userId);
+        Task<ShoppingCart> GetCartByUserIdAsync(int userId);
 
         Task AddItemToCartAsync(int userId, int productId, int quantity);
 
-        Task RemoveItemFromCartAsync(int userId, int productId, int quantity);
+        Task RemoveItemFromCartAsync(int userId, int productId);
 
         Task ClearShoppingCartAsync(int shoppingCartId);
     }

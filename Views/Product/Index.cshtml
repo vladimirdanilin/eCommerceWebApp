@@ -2,11 +2,12 @@
 
 @{
     ViewData["title"] = "ListOfProducts";
+    var currentUrl = ViewContext.HttpContext.Request.Path + ViewContext.HttpContext.Request.QueryString;
 }
 
 
 <div class="row">
-    @foreach (var item in Model)    //Model is IEnumerable<Product>
+    @foreach (var item in Model)
     {
         <div class="col-md-4 col-xs-6 border-primary mb-3">
             <div class="card mb-3" style="max-width: 540px;">
@@ -28,6 +29,25 @@
                         <div class="card-body">
                             <p class="card-text">@item.Description</p>
                             <p class="card-text">
+                                <b>Rating:</b>
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= @item.RatingValue)
+                                    {
+                                        <span class="bi bi-star-fill text-warning"></span>
+                                    }
+                                    else
+                                    {
+                                        <span class="bi bi-star text-warning"></span>
+                                    }
+                                }
+                            </p>
+                            <form method="post" asp-controller="Product" asp-action="AddRating" class="d-inline">
+                                <input type="hidden" name="productId" value="@item.Id"/>
+                                <input type="number" name="numberOfStars" value="5" min="1" max="5" class="form-control d-inline w-25" required/>
+                                <button type="submit" class="btn btn-primary">Rate</button>
+                            </form>
+                            <p class="card-text">
                                 <b>Availability:</b>
                                 @if (item.Quantity > 10)
                                 {
@@ -46,10 +66,16 @@
                     </div>
                     <div class="col-md-12">
                         <div class="card-footer">
-                            <p class="card-text justify-content-between d-flex">
-                                <a class="btn btn-outline-info float-right" asp-controller="Product" asp-action="GetDetails" asp-route-id="@item.Id"><i class="bi bi-eye-fill"></i>Show details</a>
-                                <a class="btn btn-success text-white" asp-controller="ShoppingCart" asp-action="AddItemToCart" asp-route-productId="@item.Id"><i class="bi bi-cart-plus"></i>Add To Cart For @item.Price $</a>
-                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a class="btn btn-outline-info float-right" asp-controller="Product" asp-action="GetDetails" asp-route-id="11"><i class="bi bi-eye-fill"></i>Show details</a>
+
+                                <form method="get" asp-controller="ShoppingCart" asp-action="AddItemToCart" class="d-flex align-items-center">
+                                    <input type="hidden" name="productId" value="@item.Id" class="form-control form-control-sm mr-2" style="width: 70px;" />
+                                    <input type="number" name="quantity" min="1" value="1" max="@item.Quantity" class="form-control form-control-sm mr-2" style="width: 70px;" />
+                                    <button type="submit" class="btn btn-success text-white"><i class="bi bi-cart-plus"></i> Add To Cart For @item.Price $</button>
+                                </form>
+
+                            </div>
                         </div>
                     </div>
                 </div>

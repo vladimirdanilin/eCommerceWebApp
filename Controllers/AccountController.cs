@@ -1,51 +1,21 @@
-﻿using eCommerceWebApp.Data;
-using eCommerceWebApp.Models;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using ECommerceWebApp.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
+using Microsoft.VisualBasic;
+using System.Web;
 
-namespace eCommerceWebApp.Controllers
+namespace ECommerceWebApp.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
 
-        private readonly Role _adminRole;
-        private readonly Role _userRole;
-
-        public AccountController(AppDbContext context, Role adminRole, Role userRole)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
-            _context = context;
-            _adminRole = adminRole;
-            _userRole = userRole;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
-
-        [HttpGet]
-
-        public IActionResult Login()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
-                if (user != null)
-                {
-                    await Authenticate(model.Email);
-
-                    return RedirectToAction("Index", "Product");
-                }
-                ModelState.AddModelError("", "Incorrect Login and(or) Password");
-            }
-            return View(model);
-        }   
 
         [HttpGet]
         public IActionResult Register()
@@ -57,41 +27,82 @@ namespace eCommerceWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
-                if (user == null)
-                {
-                    _context.Users.Add(new User { FullName = model.FullName, Email = model.Email, Password = model.Password, Role = _userRole });
-                    await _context.SaveChangesAsync();
-
-                    await Authenticate(model.Email);
-
-                    return RedirectToAction("Index", "Product");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Wrong Login or(and) Password");
-                }
+                return View(model);
             }
-            return View(model);
-        }
 
-        private async Task Authenticate(string userName)
-        {
-            var claims = new List<Claim>
+            var normalizedEmail = _userManager.NormalizeEmail(model.Email);
+
+            User user = new User
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
+                Email = model.Email,
+                NormalizedEmail = normalizedEmail,
+                UserName = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
             };
 
-            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+            //Adding user
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+
+                return View(model);
+            }
+
+            await _userManager.AddToRoleAsync(user, "Customer");
+
+            //Adding cookies
+            await _signInManager.SignInAsync(user, false);
+
+            return RedirectToAction("Index", "Product");
         }
 
+        //TODO: FIX RETURN URL
+        [HttpGet]
+        public IActionResult Login(string returnUrl = null)
+        {
+            return View(new LoginModel { ReturnURL = returnUrl });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: false, lockoutOnFailure: false);
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError(nameof(LoginModel.Email), "Wrong username or password");
+
+                return View(model);
+            }
+
+            if (!string.IsNullOrEmpty(model.ReturnURL) && Url.IsLocalUrl(model.ReturnURL))
+            {
+                return Redirect(model.ReturnURL);
+            }
+
+            return RedirectToAction("Index", "Product");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         { 
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "Account");
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Product");
         }
 
         public IActionResult AccessDenied()

@@ -1,20 +1,16 @@
-﻿@model Checkout
+﻿@model ECommerceWebApp.ViewModels.OrderViewModel
 
-<h2>Checkout</h2>
+<h2>Order placement</h2>
 
 @if (Model != null)
 {
-    <form method="post" asp-controller="Checkout" asp-action="SaveCheckoutData">
-        <input type="hidden" asp-for="Id">
-        <input type="hidden" asp-for="OrderId">
+    <form method="post" asp-controller="Order" asp-action="PlaceOrder">
         <table class="table">
             <thead>
                 <tr>
                     <th>Selected address</th>
                     <th>Address</th>
                     <th>City</th>
-                    <th>Postal or ZIP code</th>
-                    <th>Country</th>
                 </tr>
             </thead>
 
@@ -27,8 +23,6 @@
                         </td>
                         <td>@item.Street</td>
                         <td>@item.City</td>
-                        <td>@item.PostalOrZipCode</td>
-                        <td>@item.Country</td>
                         <td>
                         </td>
                     </tr>
@@ -38,6 +32,6 @@
 
         </table>
 
-        <button type="submit" class="btn btn-primary">Confirm checkout</button>
+        <button type="submit" class="btn btn-primary">Confirm order</button>
     </form>
 }
