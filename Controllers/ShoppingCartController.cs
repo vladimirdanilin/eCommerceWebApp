@@ -1,4 +1,5 @@
-﻿using ECommerceWebApp.Data.Services;
+﻿using ECommerceWebApp.Data;
+using ECommerceWebApp.Data.Services;
 using ECommerceWebApp.Models;
 using ECommerceWebApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerceWebApp.Controllers
 {
+    [Authorize(Roles = Roles.Customer)]
     public class ShoppingCartController : Controller
     {
         private readonly IShoppingCartService _shoppingCartService;
@@ -18,7 +20,6 @@ namespace ECommerceWebApp.Controllers
             _userManager = userManager;
         }
 
-        [Authorize(Roles = "Customer")]
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -35,38 +36,31 @@ namespace ECommerceWebApp.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Customer")]
+        [Authorize(Roles = Roles.Customer)]
         public async Task<IActionResult> AddItemToCart(int productId, int quantity)
         {
-            if (productId <= 0 || quantity <= 0)
-            {
-                return BadRequest("Invalid productId or quantity");
-            }
-
             var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-
             await _shoppingCartService.AddItemToCartAsync(user.Id, productId, quantity);
 
             return RedirectToAction("Index", "ShoppingCart");
         }
 
-        [Authorize(Roles = "Customer")]
+        [Authorize(Roles = Roles.Customer)]
         public async Task<IActionResult> RemoveItemFromCart(int productId)
         {
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
-            else
-            {
-                var user = await _userManager.GetUserAsync(User);
-                await _shoppingCartService.RemoveItemFromCartAsync(user.Id, productId);
-                return RedirectToAction("Index", "ShoppingCart");
-            }
+            var user = await _userManager.GetUserAsync(User);
+            await _shoppingCartService.RemoveItemFromCartAsync(user.Id, productId);
+
+            return RedirectToAction("Index", "ShoppingCart");
+        }
+
+        [Authorize(Roles = Roles.Customer)]
+        public async Task<IActionResult> ClearShoppingCart()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            await _shoppingCartService.ClearShoppingCartAsync(user.Id);
+
+            return RedirectToAction("Index", "ShoppingCart");
         }
     }
 }

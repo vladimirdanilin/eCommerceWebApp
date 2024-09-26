@@ -15,6 +15,8 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 //Adding DbSeedingService
 builder.Services.AddHostedService<DatabaseSeedService>();
@@ -44,10 +46,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 //Add policies
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("RequireSuperAdminRole", policy => policy.RequireRole("SuperAdmin"));
-    options.AddPolicy("RequireSalesManagerRole", policy => policy.RequireRole("SalesManager"));
-    options.AddPolicy("RequireWarehouseManagerRole", policy => policy.RequireRole("WarehouseManager"));
-    options.AddPolicy("RequireCustomerRole", policy => policy.RequireRole("Customer"));
+    options.AddPolicy("Require" + Roles.SuperAdmin, policy => policy.RequireRole(Roles.SuperAdmin));
+    options.AddPolicy("Require" + Roles.SalesManager, policy => policy.RequireRole(Roles.SalesManager));
+    options.AddPolicy("Require" + Roles.WarehouseManager, policy => policy.RequireRole(Roles.WarehouseManager));
+    options.AddPolicy("Require" + Roles.Customer, policy => policy.RequireRole(Roles.Customer));
 });
 
 // Add services to the container.
@@ -68,16 +70,12 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication();    // Authentication
-app.UseAuthorization();     // Authorization
+app.UseAuthentication();   
+app.UseAuthorization();     
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Product}/{action=Index}/{id?}");
-
-app.MapControllerRoute(
-    name: "shoppingCart",
-    pattern: "{controller=ShoppingCart}/{action=AddItemToCart}");
 
 app.Run();
 

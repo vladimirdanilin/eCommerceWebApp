@@ -1,8 +1,9 @@
-﻿@model IEnumerable<Product>
+﻿@using ECommerceWebApp.Data
+@using ECommerceWebApp.ViewModels
+@model IEnumerable<ProductViewModel>
 
 @{
     ViewData["title"] = "ListOfProducts";
-    var currentUrl = ViewContext.HttpContext.Request.Path + ViewContext.HttpContext.Request.QueryString;
 }
 
 
@@ -17,7 +18,6 @@
                             <p class="card-text">
                                 <h5 class="card-title">
                                     @item.Name
-                                    <a class="text-white float-right" asp-controller="Product" asp-action="EditProduct" asp-route-productId="@item.Id"><i class="bi bi-pencil-square"></i></a>
                                 </h5>
                             </p>
                         </div>
@@ -42,11 +42,19 @@
                                     }
                                 }
                             </p>
-                            <form method="post" asp-controller="Product" asp-action="AddRating" class="d-inline">
-                                <input type="hidden" name="productId" value="@item.Id"/>
-                                <input type="number" name="numberOfStars" value="5" min="1" max="5" class="form-control d-inline w-25" required/>
-                                <button type="submit" class="btn btn-primary">Rate</button>
-                            </form>
+                            
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                @if (User.IsInRole(Roles.Customer))
+                                {
+                                    <form method="post" asp-controller="Product" asp-action="AddRating" class="d-inline">
+                                        <input type="hidden" name="productId" value="@item.Id"/>
+                                        <input type="number" name="numberOfStars" value="5" min="1" max="5" class="form-control d-inline w-25" required/>
+                                        <button type="submit" class="btn btn-primary">Rate</button>
+                                    </form>
+                                }
+                            }
+
                             <p class="card-text">
                                 <b>Availability:</b>
                                 @if (item.Quantity > 10)
@@ -67,14 +75,44 @@
                     <div class="col-md-12">
                         <div class="card-footer">
                             <div class="d-flex justify-content-between align-items-center">
-                                <a class="btn btn-outline-info float-right" asp-controller="Product" asp-action="GetDetails" asp-route-id="11"><i class="bi bi-eye-fill"></i>Show details</a>
-
-                                <form method="get" asp-controller="ShoppingCart" asp-action="AddItemToCart" class="d-flex align-items-center">
-                                    <input type="hidden" name="productId" value="@item.Id" class="form-control form-control-sm mr-2" style="width: 70px;" />
-                                    <input type="number" name="quantity" min="1" value="1" max="@item.Quantity" class="form-control form-control-sm mr-2" style="width: 70px;" />
-                                    <button type="submit" class="btn btn-success text-white"><i class="bi bi-cart-plus"></i> Add To Cart For @item.Price $</button>
-                                </form>
-
+                                <a class="btn btn-outline-info float-right" asp-controller="Product" asp-action="GetDetails" asp-route-id="@item.Id">
+                                    <i class="bi bi-eye-fill"></i> Show details
+                                </a>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    if (User.IsInRole(Roles.SuperAdmin) || User.IsInRole(Roles.SalesManager))
+                                    {
+                                        <a class="btn btn-outline-warning float-right" asp-controller="Product" asp-action="EditProduct" asp-route-productId="@item.Id">
+                                            <i class="bi bi-pencil-square"></i> Edit
+                                        </a>
+                                    }
+                                }
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    if (User.IsInRole(Roles.SuperAdmin) || User.IsInRole(Roles.SalesManager) || User.IsInRole(Roles.WarehouseManager))
+                                    {
+                                        if (item.AvailableForSale == true)
+                                        {
+                                            <a class="btn btn-outline-danger float-right" asp-controller="Product" asp-action="RemoveProductFromSale" asp-route-productId="@item.Id">
+                                                <i class="bi bi-archive"></i> Remove From Sale
+                                            </a>
+                                        }
+                                        if (item.AvailableForSale == false)
+                                        {
+                                            <a class="btn btn-outline-success float-right" asp-controller="Product" asp-action="ReturnProductToSale" asp-route-productId="@item.Id">
+                                                <i class="bi bi-archive"></i> Return To Sale
+                                            </a>
+                                        }
+                                    }
+                                }
+                                @if (!User.Identity.IsAuthenticated || User.IsInRole(Roles.Customer))
+                                {
+                                    <form method="get" asp-controller="ShoppingCart" asp-action="AddItemToCart" class="d-flex align-items-center">
+                                        <input type="hidden" name="productId" value="@item.Id" class="form-control form-control-sm mr-2" style="width: 70px;" />
+                                        <input type="number" name="quantity" min="1" value="1" max="@item.Quantity" class="form-control form-control-sm mr-2" style="width: 70px;" />
+                                        <button type="submit" class="btn btn-success text-white"><i class="bi bi-cart-plus"></i> Add To Cart For @item.Price $</button>
+                                    </form>
+                                }
                             </div>
                         </div>
                     </div>
@@ -84,7 +122,14 @@
     }
 </div>
 
-<div style="position: fixed; right: 25px; bottom: 25px;" class="text-white">
-    <a asp-controller="Product" asp-action="AddProduct" class="btn btn-success">
-        <i class="bi bi-plus-circle"></i> Add New</a>
-</div>
+@if (User.Identity.IsAuthenticated)
+{
+    if (User.IsInRole(Roles.SuperAdmin) || User.IsInRole(Roles.SalesManager))
+    {
+        <div style="position: fixed; right: 25px; bottom: 25px;" class="text-white">
+            <a asp-controller="Product" asp-action="AddProduct" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> Add New
+            </a>
+        </div>
+    }
+}

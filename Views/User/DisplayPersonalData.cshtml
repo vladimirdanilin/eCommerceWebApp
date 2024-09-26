@@ -1,0 +1,22 @@
+﻿@model ECommerceWebApp.ViewModels.UserViewModel
+
+@if (Model != null && User.Identity.IsAuthenticated)
+{
+    <h2>Profile</h2>
+
+    <div class="profile-section">
+        <h3>@Model.FirstName @Model.LastName</h3>
+
+        <p>
+            <strong>Email:</strong> @Model.Email
+        </p>
+
+        <p>
+            <strong>Phone number:</strong> @Model.PhoneNumber
+        </p>
+
+        <a class="btn btn-primary" asp-controller="User" asp-action="EditUserData">
+            <i class="bi bi-pencil"></i> Edit data
+        </a>
+    </div>
+}

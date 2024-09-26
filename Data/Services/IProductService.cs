@@ -1,21 +1,28 @@
-﻿using ECommerceWebApp.Models;
+﻿using ECommerceWebApp.Data.Enums;
+using ECommerceWebApp.DTOs;
+using ECommerceWebApp.Models;
+using ECommerceWebApp.ViewModels;
 
 namespace ECommerceWebApp.Data.Services
 {
     public interface IProductService
     {
-        Task<IEnumerable<Product>> GetAllProductsAsync();
+        Task AddProductAsync(ProductDTO productDTO);
 
-        Task<Product> GetProductByIdAsync(int id);
+        Task<IEnumerable<ProductDTO>> GetProductsByCategoryAsync(ProductCategory? productCategory);
 
-        Task AddProductAsync(Product product);
+        Task<ProductDTO> GetProductByIdAsync(int id);
 
-        Task EditProductAsync(Product editedProduct);
+        Task <IReadOnlyCollection<ProductDTO>> SearchForProductAsync(string searchString);
 
-        Task <IEnumerable<Product>> SearchForProductAsync(string searchString);
+        Task EditProductAsync(ProductDTO editedProductDTO);
 
         Task AddRatingAsync(int productId, int userId, int numberOfStars);
 
-        void DeleteProductAsync(int id);
+        Task RemoveProductFromSaleAsync(int productId);
+
+        Task<IEnumerable<ProductDTO>> GetNotAvailableProductsAsync();
+
+        Task ReturnProductToSaleAsync(int productId);
     }
 }

@@ -17,9 +17,9 @@ namespace ECommerceWebApp.Data
 
         public static async Task SeedRolesAsync(UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager)
         {
-            if (!await roleManager.RoleExistsAsync("SuperAdmin"))
+            if (!await roleManager.RoleExistsAsync(Roles.SuperAdmin))
             {
-                await roleManager.CreateAsync(new IdentityRole<int>("SuperAdmin"));
+                await roleManager.CreateAsync(new IdentityRole<int>(Roles.SuperAdmin));
 
                 string superAdminEmail = "volodyadanilin@gmail.com";
                 string superAdminPassword = "Vova25";
@@ -37,12 +37,12 @@ namespace ECommerceWebApp.Data
                 var result = await userManager.CreateAsync(superAdmin, superAdminPassword);
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(superAdmin, "SuperAdmin");
+                    await userManager.AddToRoleAsync(superAdmin, Roles.SuperAdmin);
                 }
             }
 
 
-            string[] roles = { "SalesManager", "WarehouseManager", "Customer" };
+            string[] roles = { Roles.SalesManager, Roles.WarehouseManager, Roles.Customer };
 
             foreach (var role in roles)
             {

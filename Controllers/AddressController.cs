@@ -20,7 +20,7 @@ namespace ECommerceWebApp.Controllers
             _userManager = userManager;
         }
 
-        [Authorize(Roles = "Customer")]
+        [Authorize(Roles = Roles.Customer)]
         public async Task<IActionResult> Index()
         {
             var currentUser = await _userManager.GetUserAsync(User);
@@ -36,14 +36,14 @@ namespace ECommerceWebApp.Controllers
             return View(addressViewModels);
         }
 
-        [Authorize (Roles = "Customer")]
+        [Authorize (Roles = Roles.Customer)]
         public async Task<IActionResult> AddAddress()
         {
             return View();
         }
 
         [HttpPost]
-        [Authorize(Roles = "Customer")]
+        [Authorize(Roles = Roles.Customer)]
         public async Task<IActionResult> AddAddress(AddressViewModel addressViewModel)
         {
             if (!ModelState.IsValid)
@@ -57,7 +57,7 @@ namespace ECommerceWebApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Customer")]
+        [Authorize(Roles = Roles.Customer)]
         public async Task<IActionResult> DeleteAddress(int addressId)
         {
             var currentUser = await _userManager.GetUserAsync(User);

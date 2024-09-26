@@ -10,6 +10,8 @@ namespace ECommerceWebApp.ViewModels
 
         public string LastName { get; set; }
 
+        public string? PhoneNumber { get; set; }
+
         [EmailAddress]
         public string Email { get; set; }
 

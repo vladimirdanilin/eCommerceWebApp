@@ -1,11 +1,10 @@
 ﻿using ECommerceWebApp.Data.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace ECommerceWebApp.Models
+namespace ECommerceWebApp.DTOs
 {
-    public class Product
+    public class ProductDTO
     {
-        [Key]
         public int Id { get; set; }
 
         public string PictureURL { get; set; }
@@ -19,15 +18,10 @@ namespace ECommerceWebApp.Models
         public int TotalNumberOfStars { get; set; }
         public int TotalNumberOfRates { get; set; }
 
-        public int Quantity { get; set; }
-
         public ProductCategory ProductCategory { get; set; }
 
-        //Relationships
-        public ICollection<Rating>? Ratings { get; set; }
+        public int Quantity { get; set; }
 
-        public ICollection<OrderProduct>? OrdersProducts { get; set; }
-
-        public bool AvailableForSale { get; set; } = true;
-    }
+        public bool? AvailableForSale { get; set; }
+    }   
 }

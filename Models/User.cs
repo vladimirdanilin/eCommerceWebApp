@@ -8,6 +8,8 @@ namespace ECommerceWebApp.Models
 
         public string LastName { get; set; }
 
+        public string? PhoneNumber { get; set; }
+
         public ShoppingCart? ShoppingCart { get; set; }
 
         public string? ProfilePictureURL { get; set; }

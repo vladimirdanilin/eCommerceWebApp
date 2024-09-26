@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using ECommerceWebApp.Data
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -23,9 +25,18 @@
                         <li class="navbar-nav flex-grow-1">
                             <a class="nav-link text-dark" asp-controller="Product" asp-action="Index"><i class="badge-info bi-box-fill"></i> Products</a>
                         </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            if (User.IsInRole(Roles.SuperAdmin) || User.IsInRole(Roles.SalesManager) || User.IsInRole(Roles.WarehouseManager))
+                            {
+                                <li class="navbar-nav">
+                                    <a class="nav-link text-dark" asp-controller="Product" asp-action="DisplayNotAvailableProducts"><i class="bi bi-folder-x"></i> Not In Sale</a>
+                                </li>
+                            }
+                        }
 
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="button" data-bs-toggle="dropdown"
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="button" data-bs-toggle="dropdown"
                                aria-haspopup="true" aria-expanded="false">
                                 <i class="bi bi-gear"></i>Catalog
                             </a>
@@ -48,20 +59,26 @@
                         </div>
                     </form>
 
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="navbar-nav flex-grow">
+                            <a class="nav-link text-dark" asp-controller="User" asp-action="DisplayPersonalData"><i class="bi bi-person"></i>Profile</a>
+                        </li>
+                    }
+
                     <ul class="navbar-nav flex-grow">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            @if (User.IsInRole("Customer"))
+                            if (User.IsInRole(Roles.Customer))
                             {
                                 <li class="nav-item dropdown">
                                     <a class="nav-link text-dark" href="#" id="navbarDropdown" role="button" data-toggle="button" data-bs-toggle="dropdown"
                                        aria-haspopup="true" aria-expanded="false">
-                                        <i class="bi bi-person-fill"></i> Profile
+                                        <i class="bi bi-list"></i> Menu
                                     </a>
 
-                                    @*Defining all the options below*@
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" asp-controller="Order" asp-action="DisplayOrders"><i class="bi bi-bag"></i> Orders</a>
+                                        <a class="dropdown-item" asp-controller="Order" asp-action="DisplayUserOrders"><i class="bi bi-bag"></i> Orders</a>
                                         <a class="dropdown-item" asp-controller="Address" asp-action="Index"><i class="bi bi-house"></i> Addresses</a>
                                     </div>
 
@@ -72,10 +89,17 @@
                                 </li>
                             }
 
-                            @if (User.IsInRole("SuperAdmin"))
+                            @if (User.IsInRole(Roles.SuperAdmin) || User.IsInRole(Roles.SalesManager))
                             {
                                 <li class="navbar-nav flex-grow">
-                                    <a class="nav-link text-dark" asp-controller="Role" asp-action="UserList"><i class="bi bi-person-add"></i>STAFF</a>
+                                    <a class="nav-link text-dark" asp-controller="Order" asp-action="DisplayAllOrders"><i class="bi bi-boxes"></i>ORDERS</a>
+                                </li>
+                            }
+
+                            @if (User.IsInRole(Roles.SuperAdmin))
+                            {
+                                <li class="navbar-nav flex-grow">
+                                    <a class="nav-link text-dark" asp-controller="Role" asp-action="UserList"><i class="bi bi-person-add"></i>USERS & STAFF</a>
                                 </li>
                             }
 

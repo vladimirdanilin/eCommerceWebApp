@@ -1,8 +1,7 @@
-﻿using ECommerceWebApp.Models;
+﻿using ECommerceWebApp.Data;
+using ECommerceWebApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic;
-using System.Web;
 
 namespace ECommerceWebApp.Controllers
 {
@@ -56,7 +55,7 @@ namespace ECommerceWebApp.Controllers
                 return View(model);
             }
 
-            await _userManager.AddToRoleAsync(user, "Customer");
+            await _userManager.AddToRoleAsync(user, Roles.Customer);
 
             //Adding cookies
             await _signInManager.SignInAsync(user, false);

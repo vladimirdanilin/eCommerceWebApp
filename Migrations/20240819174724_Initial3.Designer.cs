@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerceWebApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240730180444_Initial")]
-    partial class Initial
+    [Migration("20240819174724_Initial3")]
+    partial class Initial3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,6 +89,12 @@ namespace ECommerceWebApp.Migrations
                     b.Property<int?>("ShippingAddressId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Total")
+                        .HasColumnType("float");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -107,6 +113,9 @@ namespace ECommerceWebApp.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.HasKey("OrderId", "ProductId");
@@ -130,8 +139,7 @@ namespace ECommerceWebApp.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PictureURL")
                         .IsRequired()
@@ -143,11 +151,8 @@ namespace ECommerceWebApp.Migrations
                     b.Property<int>("ProductCategory")
                         .HasColumnType("int");
 
-                    b.Property<double>("Quantity")
-                        .HasColumnType("float");
-
-                    b.Property<double>("RatingValue")
-                        .HasColumnType("float");
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.Property<int>("TotalNumberOfRates")
                         .HasColumnType("int");

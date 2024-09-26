@@ -1,4 +1,6 @@
-﻿@model IEnumerable<Order>
+﻿@using ECommerceWebApp.Data
+
+@model IEnumerable<ECommerceWebApp.ViewModels.OrderListViewModel>
 
 <h2>Orders</h2>
 
@@ -7,23 +9,112 @@
     <table class="table">
         <thead>
             <tr>
+                @if (User.Identity.IsAuthenticated && !User.IsInRole(Roles.Customer))
+                {
+                    <th>Username</th>
+                }
                 <th>Date of The Order</th>
                 <th>Shipping Address</th>
+                <th>Total</th>
+                <th>Status</th>
             </tr>
         </thead>
 
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var order in Model)
             {
                 <tr>
-                    <td>@item.OrderDate</td>
-                    <td>@item.ShippingAddress.City, @item.ShippingAddress.Street</td>
-                </tr>
+                    @if (User.Identity.IsAuthenticated && !User.IsInRole(Roles.Customer))
+                    {
+                        <td>@order.Username</td>
+                    }
+                    <td>@order.OrderDate</td>
+                    <td>@order.ShippingAddress</td>
+                    <td>@order.Total</td>
+                    <td>
+                        @if (User.Identity.IsAuthenticated && !User.IsInRole(Roles.Customer))
+                        {
+                            <form method="post" asp-controller="Order" asp-action="EditStatus" asp-route-orderId="@order.OrderId">
+                                <select asp-for="@order.Status" name="orderStatus" class="form-select" onchange="this.form.submit()">
+                                    <option value="Pending">Pending</option>
+                                    <option value="Processing">Processing</option>
+                                    <option value="Ready">Ready</option>
+                                    <option value="Declined">Declined</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                    <option value="Delivered">Delivered</option>
+                                </select>
+                            </form>
+                        }
+                        else
+                        {
+                            @if (order.Status == ECommerceWebApp.Data.Enums.OrderStatus.Pending)
+                            {
+                                <span class="badge bg-info text-white">
+                                    <i class="bi bi-check-lg"></i> Pending
+                                </span>
+                            }
+                            @if (order.Status == ECommerceWebApp.Data.Enums.OrderStatus.Processing)
+                            {
+                                <span class="badge bg-warning text-white">
+                                    <i class="bi bi-recycle"></i> Processing
+                                </span>
+                            }
+                            @if (order.Status == ECommerceWebApp.Data.Enums.OrderStatus.Ready)
+                            {
+                                <span class="badge bg-success text-white">
+                                    <i class="bi bi-check-all"></i> Ready
+                                </span>
+                            }
+                            @if (order.Status == ECommerceWebApp.Data.Enums.OrderStatus.Declined)
+                            {
+                                <span class="badge bg-danger text-white">
+                                    <i class="bi bi-ban"></i> Declined
+                                </span>
+                            }
+                            @if (order.Status == ECommerceWebApp.Data.Enums.OrderStatus.Cancelled)
+                            {
+                                <span class="badge bg-danger text-white">
+                                    <i class="bi bi-x-circle"></i> Cancelled
+                                </span>
+                            }
+                            @if (order.Status == ECommerceWebApp.Data.Enums.OrderStatus.Delivered)
+                            {
+                                <span class="badge bg-success text-white">
+                                    <i class="bi bi-check2-circle"></i> Delivered
+                                </span>
+                            }
+                        }
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-primary" asp-controller="Order" asp-action="GetOrderDetails" asp-route-orderId="@order.OrderId">Details</a>
+                    </td>
+                    <td>
+                        @if (User.Identity.IsAuthenticated && User.IsInRole(Roles.Customer)
+                       && (order.Status == ECommerceWebApp.Data.Enums.OrderStatus.Pending 
+                                || order.Status == ECommerceWebApp.Data.Enums.OrderStatus.Processing 
+                                || order.Status == ECommerceWebApp.Data.Enums.OrderStatus.Ready))
+                        {
+                            <a class="btn btn-sm btn-outline-warning" asp-controller="Order" asp-action="CancelOrder" asp-route-orderId="@order.OrderId">Cancel Order</a>
+                        }
+                    </td>
+                </tr>  
             }
         </tbody>
     </table>
 }
 else
 {
-    <p>You don't have any orders</p>
+    <p>No Orders Yet</p>
 }
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var currentStatus = document.getElementById('currentStatus').value;
+        var selectElement = document.querySelector('select[name="orderStatus"]');
+
+        if (selectElement) {
+            selectElement.value = currentStatus;
+        }
+    });
+</script>

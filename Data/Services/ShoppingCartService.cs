@@ -70,9 +70,23 @@ namespace ECommerceWebApp.Data.Services
 
         public async Task ClearShoppingCartAsync(int userId)
         {
-            var shoppingCartToRemove = await _context.ShoppingCarts.FirstOrDefaultAsync(sc => sc.UserId == userId);
-            _context.ShoppingCarts.Remove(shoppingCartToRemove);
-            await _context.SaveChangesAsync();
+            var shoppingCartToRemove = await _context.ShoppingCarts
+                .Where(sc => sc.UserId == userId)
+                .Select(sc => new
+                {
+                    ShoppingCart = sc,
+                    CartItems = sc.CartItems
+                })
+                .FirstOrDefaultAsync();
+
+            if (shoppingCartToRemove != null)
+            {
+                _context.CartItems.RemoveRange(shoppingCartToRemove.CartItems);
+
+                _context.ShoppingCarts.Remove(shoppingCartToRemove.ShoppingCart);
+
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task RemoveItemFromCartAsync(int userId, int productId)

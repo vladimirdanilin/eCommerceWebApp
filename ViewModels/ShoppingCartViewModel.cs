@@ -6,25 +6,20 @@ namespace ECommerceWebApp.ViewModels
     {
         public int Id { get; set; }
 
-        public List<CartItem>? CartItems { get; set; }
+        public List<CartItem>? CartItems { get; set; } = new List<CartItem>();
 
-        public double TotalPrice { get; set; }
+        public double TotalPrice 
+        {
+            get
+            {
+                return Math.Round(CartItems?.Sum(item => item.TotalUnitPrice) ?? 0, 2);
+            }
+        }
 
         public ShoppingCartViewModel(int id, List<CartItem> cartItems) 
         {
             Id = id;
             CartItems = cartItems;
-            CalculateCartTotal();
-        }
-
-        public void CalculateCartTotal()
-        {
-            TotalPrice = 0;
-            foreach (var item in CartItems)
-            {
-                TotalPrice += item.TotalUnitPrice;
-            }
-            TotalPrice = Math.Round(TotalPrice, 2);
         }
     }
 }

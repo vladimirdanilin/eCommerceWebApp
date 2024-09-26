@@ -2,16 +2,19 @@
 
 @model ECommerceWebApp.ViewModels.RoleViewModel
 
-<h2>Роли пользователя @Model.UserEmail</h2>
+<h2>Roles @Model.UserEmail</h2>
 
 <form asp-action="Edit" method="post">
     <input type="hidden" name="userId" value="@Model.UserId" />
     <div class="form-group">
         @foreach (var role in Model.AllRoles)
         {
-            <div>
-                <input type="checkbox" name="roles" value="@role.Name" @(Model.UserRoles.Contains(role.Name) ? "checked" : "") /> @role.Name
-            </div>
+            if (role.Name != "SuperAdmin")
+            {
+                <div>
+                    <input type="radio" name="selectedRoles" value="@role.Name" @(Model.UserRoles.Contains(role.Name) ? "checked" : "") /> @role.Name
+                </div>
+            }
         }
     </div>
     <button type="submit" class="btn btn-primary">Save</button>

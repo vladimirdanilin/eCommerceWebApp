@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ECommerceWebApp.Data.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ECommerceWebApp.Models
@@ -10,9 +11,13 @@ namespace ECommerceWebApp.Models
 
         public DateOnly OrderDate { get; set; }
 
+        public OrderStatus Status { get; set; }
+
+        public double Total { get; set; }
+
         //Relationships
 
-        public List<OrderProduct> OrdersProducts { get; set; }
+        public ICollection<OrderProduct>? OrdersProducts { get; set; }
 
         //User
 

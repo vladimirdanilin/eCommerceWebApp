@@ -1,5 +1,9 @@
-﻿using ECommerceWebApp.Models;
+﻿using ECommerceWebApp.Data.Enums;
+using ECommerceWebApp.DTOs;
+using ECommerceWebApp.Models;
+using ECommerceWebApp.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
 
 namespace ECommerceWebApp.Data.Services
 {
@@ -12,57 +16,90 @@ namespace ECommerceWebApp.Data.Services
             _context = context;
         }
 
-        public async Task AddProductAsync(Product product)
+        public async Task AddProductAsync(ProductDTO productDTO)
         {
+            var product = new Product
+            {
+                PictureURL = productDTO.PictureURL,
+                Name = productDTO.Name,
+                Description = productDTO.Description,
+                Price = productDTO.Price,
+                ProductCategory = productDTO.ProductCategory
+            };
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
         }
 
-        public void DeleteProductAsync(int id)
+        public async Task<IEnumerable<ProductDTO>> GetProductsByCategoryAsync(ProductCategory? productCategory)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IEnumerable<Product>> GetAllProductsAsync()
-        {
-            var result = await _context.Products.ToListAsync();
-            return result;
-        }
-
-        public async Task<Product> GetProductByIdAsync(int id)
-        {
-            var result = await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
-            return result;
-        }
-
-        public async Task<IEnumerable<Product>> SearchForProductAsync(string searchString)
-        {
-            if (string.IsNullOrWhiteSpace(searchString))
-            {
-                return Enumerable.Empty<Product>();
-            }
-
             return await _context.Products
-                .Where(p => p.Name.ToLower().Contains(searchString.ToLower()))
-                .ToListAsync();
+                    .Where(p => p.AvailableForSale == true && (productCategory == null || p.ProductCategory == productCategory))
+                    .Select(p => new ProductDTO
+                    {
+                        Id = p.Id,
+                        PictureURL = p.PictureURL,
+                        Name = p.Name,
+                        Description = p.Description,
+                        Price = p.Price,
+                        TotalNumberOfRates = p.TotalNumberOfRates,
+                        TotalNumberOfStars = p.TotalNumberOfStars,
+                        Quantity = p.Quantity,
+                        AvailableForSale = p.AvailableForSale
+                    }
+                    ).ToListAsync();
         }
 
-        public async Task EditProductAsync(Product editedProduct)
+        public async Task<ProductDTO> GetProductByIdAsync(int id)
+        {
+            return await _context.Products
+                .Where(p => p.Id == id)
+                .Select(p => new ProductDTO
+                { 
+                   Id = p.Id,
+                   PictureURL = p.PictureURL,
+                   Name = p.Name,
+                   Description = p.Description,
+                   Price = p.Price,
+                   TotalNumberOfRates = p.TotalNumberOfRates,
+                   TotalNumberOfStars= p.TotalNumberOfStars,
+                   Quantity = p.Quantity
+                }).FirstOrDefaultAsync();
+        }
+
+        public async Task<IReadOnlyCollection<ProductDTO>> SearchForProductAsync(string searchString)
+        {
+            return await _context.Products
+                .Where(p => p.Name.ToLower().Contains(searchString.ToLower()) && p.AvailableForSale == true)
+                .Select(p => new ProductDTO
+                {
+                    Id = p.Id,
+                    PictureURL = p.PictureURL,
+                    Name = p.Name,
+                    Description = p.Description,
+                    Price = p.Price,
+                    TotalNumberOfRates = p.TotalNumberOfRates,
+                    TotalNumberOfStars = p.TotalNumberOfStars,
+                    ProductCategory = p.ProductCategory,
+                    Quantity = p.Quantity,
+                    AvailableForSale = p.AvailableForSale
+                }).ToListAsync();
+        }
+
+        public async Task EditProductAsync(ProductDTO editedProduct)
         {
             var existingProduct = await _context.Products.FirstOrDefaultAsync(p => p.Id == editedProduct.Id);
 
             if (existingProduct == null)
             {
+                throw new KeyNotFoundException("Product not found");
+            } 
 
-            }
-            else
-            { 
-                existingProduct.Name = editedProduct.Name;
-                existingProduct.Description = editedProduct.Description;
-                existingProduct.Price = editedProduct.Price;
-                existingProduct.PictureURL = editedProduct.PictureURL;
-                existingProduct.ProductCategory = editedProduct.ProductCategory;
-            }
+            existingProduct.Name = editedProduct.Name;
+            existingProduct.Description = editedProduct.Description;
+            existingProduct.Price = editedProduct.Price;
+            existingProduct.PictureURL = editedProduct.PictureURL;
+            existingProduct.ProductCategory = editedProduct.ProductCategory;
+
             try
             {
                 _context.SaveChanges();
@@ -99,6 +136,44 @@ namespace ECommerceWebApp.Data.Services
 
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task RemoveProductFromSaleAsync(int productId)
+        {
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == productId);
+
+            product.AvailableForSale = false;
+
+            _context.Update(product);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<ProductDTO>> GetNotAvailableProductsAsync()
+        {
+            return await _context.Products
+                    .Where(p => p.AvailableForSale == false)
+                    .Select(p => new ProductDTO
+                    {
+                        Id = p.Id,
+                        PictureURL = p.PictureURL,
+                        Name = p.Name,
+                        Description = p.Description,
+                        Price = p.Price,
+                        TotalNumberOfRates = p.TotalNumberOfRates,
+                        TotalNumberOfStars = p.TotalNumberOfStars,
+                        Quantity = p.Quantity,
+                        AvailableForSale = p.AvailableForSale
+                    }).ToListAsync();
+        }
+
+        public async Task ReturnProductToSaleAsync(int productId)
+        {
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == productId);
+
+            product.AvailableForSale = true;
+
+            _context.Update(product);
+            await _context.SaveChangesAsync();
         }
     }
 }
